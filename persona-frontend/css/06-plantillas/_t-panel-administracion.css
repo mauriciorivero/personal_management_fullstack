@@ -1,0 +1,169 @@
+/* =====================================================================
+   06-plantillas/_t-panel-administracion.css
+   ---------------------------------------------------------------------
+   PLANTILLA: Panel de administracion
+
+   ATOMIC DESIGN - NIVEL 4: PLANTILLAS
+   Una plantilla define la ESTRUCTURA de la pagina: donde va cada
+   organismo. No define el contenido ni los colores de los
+   componentes, solo la distribucion en el espacio.
+
+   Dicho de otra forma: la plantilla es el esqueleto; los organismos
+   son los organos. La plantilla no sabe si la tabla muestra usuarios
+   o redes sociales, solo sabe que "aqui va el contenido principal".
+
+   ESTRUCTURA (CSS Grid con areas nombradas):
+
+     MOVIL (< 905px)              ESCRITORIO (>= 905px)
+     +--------------------+       +---------+--------------+
+     |    barra           |       | barra   |    barra     |
+     +--------------------+       +---------+--------------+
+     |                    |       | nav     |              |
+     |    contenido       |       | lateral |  contenido   |
+     |                    |       |         |              |
+     +--------------------+       +---------+--------------+
+
+   El panel lateral es fixed en movil (flota sobre el contenido), asi
+   que en la cuadricula de movil no ocupa ninguna celda.
+   ===================================================================== */
+
+.t-panel-administracion {
+  display: grid;
+
+  /* ------------------------------------------------------------------
+     POR QUE minmax(0, 1fr) Y NO SOLO 1fr?
+     ------------------------------------------------------------------
+     Esta es LA trampa mas famosa de CSS Grid, y produce un desborde
+     horizontal muy difícil de diagnosticar.
+
+     `1fr` equivale en realidad a `minmax(auto, 1fr)`, y ese `auto`
+     significa "nunca mas angosto que el min-content de su contenido".
+
+     El titulo de la barra superior lleva white-space: nowrap, asi que
+     su min-content es el ancho del texto COMPLETO. En una pantalla de
+     390px, la columna se negaba a bajar de 408px y la pagina entera
+     se desplazaba en horizontal.
+
+     minmax(0, 1fr) pone el minimo en 0 y autoriza a la columna a
+     encogerse. El recorte con puntos suspensivos del titulo
+     (text-overflow: ellipsis) hace el resto.
+
+     Regla practica: en una cuadricula cuyo contenido puede ser ancho
+     (tablas, textos sin cortes), usa SIEMPRE minmax(0, 1fr).
+     ------------------------------------------------------------------ */
+  grid-template-columns: minmax(0, 1fr);
+
+  /* ------------------------------------------------------------------
+     TODAS las areas que usan los hijos tienen que estar declaradas
+     aqui, incluida "navegacion".
+
+     Si un hijo pide `grid-area: navegacion` y ese nombre NO existe en
+     la cuadricula, CSS Grid le crea COLUMNAS IMPLICITAS para
+     acomodarlo. Eso deformaba el layout en movil.
+
+     En movil la fila "navegacion" mide 0 porque el panel que contiene
+     es position: fixed (esta fuera del flujo), asi que no estorba.
+     ------------------------------------------------------------------ */
+  grid-template-rows: auto auto 1fr;
+
+  /* Las areas nombradas hacen el layout LEGIBLE: se ve el dibujo de
+     la pagina en el codigo. Es mucho mas claro que decir
+     grid-column: 2 / 3; grid-row: 1 / 2. */
+  grid-template-areas:
+    "barra"
+    "navegacion"
+    "contenido";
+
+  /* 100dvh asegura que la pagina ocupe el alto real de la ventana,
+     descontando la barra del navegador movil. */
+  min-height: 100dvh;
+
+  /* Red de seguridad: si algun dia un componente nuevo se pasa de
+     ancho, se recorta en lugar de romper toda la pagina. */
+  overflow-x: clip;
+}
+
+.t-panel-administracion__barra {
+  grid-area: barra;
+}
+
+.t-panel-administracion__navegacion {
+  grid-area: navegacion;
+}
+
+.t-panel-administracion__contenido {
+  grid-area: contenido;
+
+  /* min-width: 0 en una celda de grid es imprescindible cuando el
+     contenido puede ser ancho (una tabla). Sin esto, la tabla estira
+     la columna y rompe el layout en lugar de desplazarse. */
+  min-width: 0;
+
+  padding: var(--espacio-4);
+  overflow-x: hidden;
+}
+
+/* ---------------------------------------------------------------------
+   ESCRITORIO: aparece la columna del panel lateral
+   --------------------------------------------------------------------- */
+@media (min-width: 905px) {
+  .t-panel-administracion {
+    /* Primera columna del ancho del panel, segunda con el resto.
+       De nuevo minmax(0, 1fr) en la columna del contenido: ahi va la
+       tabla, que es el elemento mas ancho de la aplicacion. */
+    grid-template-columns: var(--ancho-navegacion-lateral) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+
+    grid-template-areas:
+      "barra      barra"
+      "navegacion contenido";
+  }
+
+  .t-panel-administracion__contenido {
+    padding: var(--espacio-6);
+
+    /* Si el contenido es mas alto que la ventana, se desplaza SOLO
+       esta celda y la barra lateral queda fija. */
+    overflow-y: auto;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: cabecera de la pagina (titulo + accion principal)
+   --------------------------------------------------------------------- */
+.t-panel-administracion__cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--espacio-4);
+
+  margin-bottom: var(--espacio-5);
+}
+
+.t-panel-administracion__titulo {
+  font-size: var(--texto-titular-medio);
+  font-weight: var(--peso-medio);
+  color: var(--color-sobre-fondo);
+  line-height: var(--linea-ajustada);
+}
+
+.t-panel-administracion__descripcion {
+  margin-top: var(--espacio-2);
+  max-width: var(--ancho-maximo-texto);
+
+  font-size: var(--texto-cuerpo-medio);
+  color: var(--color-sobre-superficie-variante);
+  line-height: var(--linea-normal);
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: pila vertical de secciones
+   ---------------------------------------------------------------------
+   El patron "owl selector" (* + *) aplica el margen solo a los
+   elementos que TIENEN un hermano antes. Asi el primer elemento no
+   recibe margen superior y no hay que corregirlo con :first-child.
+   --------------------------------------------------------------------- */
+.t-panel-administracion__pila > * + * {
+  margin-top: var(--espacio-5);
+}

@@ -1,0 +1,168 @@
+/* =====================================================================
+   04-moleculas/_m-notificacion.css
+   ---------------------------------------------------------------------
+   MOLECULA: Notificacion flotante (snackbar / toast)
+
+   Aviso temporal que confirma una accion ("Usuario creado") o informa
+   de un error ("No se pudo conectar con la API").
+
+   POR QUE UNA NOTIFICACION Y NO UN alert()?
+   Porque alert() BLOQUEA todo el navegador: el usuario no puede hacer
+   nada hasta que pulse "Aceptar", y el estilo es del sistema
+   operativo, imposible de personalizar. Una notificacion aparece,
+   informa y se va sola.
+
+   ACCESIBILIDAD: el contenedor lleva aria-live="polite" y role="status"
+   para que el lector de pantalla anuncie el mensaje al aparecer. Con
+   aria-live="assertive" interrumpiria al usuario, lo cual solo se
+   justifica en errores criticos.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   Contenedor: fijo en la pantalla, apila las notificaciones
+   --------------------------------------------------------------------- */
+.m-notificacion-contenedor {
+  position: fixed;
+
+  /* En movil, abajo y ocupando el ancho. */
+  bottom: var(--espacio-4);
+  left: var(--espacio-4);
+  right: var(--espacio-4);
+  z-index: var(--capa-notificacion);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+
+  /* El contenedor no debe interceptar clics en la pagina que tapa;
+     solo las notificaciones concretas son interactivas. */
+  pointer-events: none;
+}
+
+/* Desde tablet, esquina inferior derecha con ancho limitado. */
+@media (min-width: 600px) {
+  .m-notificacion-contenedor {
+    left: auto;
+    max-width: 26rem;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   La notificacion
+   --------------------------------------------------------------------- */
+.m-notificacion {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espacio-3);
+
+  padding: var(--espacio-4);
+  border-radius: var(--radio-pequeno);
+  box-shadow: var(--elevacion-3);
+
+  /* Material usa el color INVERSO para la snackbar por defecto: fondo
+     oscuro en tema claro, para que destaque sobre el contenido. */
+  background-color: var(--color-superficie-contenedor-alto);
+  color: var(--color-sobre-superficie);
+  border-left: 4px solid var(--color-primario);
+
+  font-size: var(--texto-cuerpo-medio);
+
+  /* Esta si recibe clics (para el boton de cerrar). */
+  pointer-events: auto;
+
+  /* Animacion de entrada: entra deslizando desde abajo. */
+  animation: m-notificacion-entrar var(--duracion-larga) var(--curva-desacelerada);
+}
+
+@keyframes m-notificacion-entrar {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Clase que agrega el JavaScript justo antes de quitar el elemento
+   del DOM, para que la salida tambien sea suave. */
+.m-notificacion--saliendo {
+  animation: m-notificacion-salir var(--duracion-media) var(--curva-acelerada) forwards;
+}
+
+@keyframes m-notificacion-salir {
+  to {
+    opacity: 0;
+    transform: translateX(1rem);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   VARIANTES semanticas: cambia el color del borde y del icono
+   --------------------------------------------------------------------- */
+.m-notificacion--exito {
+  border-left-color: var(--color-exito);
+}
+
+.m-notificacion--exito .m-notificacion__icono {
+  color: var(--color-exito);
+}
+
+.m-notificacion--error {
+  border-left-color: var(--color-error);
+}
+
+.m-notificacion--error .m-notificacion__icono {
+  color: var(--color-error);
+}
+
+.m-notificacion--advertencia {
+  border-left-color: var(--color-advertencia);
+}
+
+.m-notificacion--advertencia .m-notificacion__icono {
+  color: var(--color-advertencia);
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTOS internos
+   --------------------------------------------------------------------- */
+.m-notificacion__icono {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.1rem;
+  color: var(--color-primario);
+  flex-shrink: 0;
+}
+
+.m-notificacion__contenido {
+  /* flex: 1 con min-width: 0 permite que el texto largo se parta en
+     varias lineas en lugar de desbordar la notificacion. */
+  flex: 1;
+  min-width: 0;
+}
+
+.m-notificacion__titulo {
+  font-weight: var(--peso-semi);
+  margin-bottom: var(--espacio-1);
+}
+
+.m-notificacion__mensaje {
+  color: var(--color-sobre-superficie-variante);
+  line-height: var(--linea-normal);
+}
+
+/* Lista de detalles de validacion que devuelve la API. */
+.m-notificacion__detalles {
+  margin-top: var(--espacio-2);
+  padding-left: var(--espacio-4);
+
+  font-size: var(--texto-cuerpo-pequeno);
+  color: var(--color-sobre-superficie-variante);
+}
+
+.m-notificacion__cerrar {
+  flex-shrink: 0;
+  color: var(--color-sobre-superficie-variante);
+}

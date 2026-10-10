@@ -1,0 +1,110 @@
+/* =====================================================================
+   04-moleculas/_m-estado-vacio.css
+   ---------------------------------------------------------------------
+   MOLECULA: Estado vacio (empty state)
+
+   Lo que se muestra cuando una lista no tiene elementos.
+
+   POR QUE ES IMPORTANTE DISENIAR EL ESTADO VACIO?
+   Es uno de los descuidos mas frecuentes. Si una tabla sin datos
+   aparece como un rectangulo en blanco, el usuario no sabe si la
+   aplicacion se rompio, si todavia esta cargando o si de verdad no
+   hay nada.
+
+   Un buen estado vacio responde tres preguntas:
+     1. Que pasa?       -> "No hay usuarios registrados"
+     2. Por que?        -> "Todavia no se ha creado ninguno"
+     3. Que puedo hacer?-> boton "Crear usuario"
+
+   Los tres estados que toda vista con datos debe manejar son:
+     CARGANDO -> .a-cargador-bloque
+     VACIO    -> .m-estado-vacio   (este archivo)
+     ERROR    -> .m-estado-vacio--error
+   ===================================================================== */
+
+.m-estado-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-4);
+
+  padding: var(--espacio-12) var(--espacio-4);
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: icono ilustrativo
+   --------------------------------------------------------------------- */
+.m-estado-vacio__icono {
+  width: 4rem;
+  height: 4rem;
+
+  /* Trazo fino para que el icono grande se vea ligero y no agresivo. */
+  stroke-width: 1.25;
+  color: var(--color-contorno);
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: textos
+   --------------------------------------------------------------------- */
+.m-estado-vacio__titulo {
+  font-size: var(--texto-titulo-grande);
+  font-weight: var(--peso-medio);
+  color: var(--color-sobre-superficie);
+}
+
+.m-estado-vacio__mensaje {
+  /* max-width en ch limita la linea a ~45 caracteres, el ancho mas
+     comodo de leer para un texto centrado. */
+  max-width: 45ch;
+
+  font-size: var(--texto-cuerpo-medio);
+  color: var(--color-sobre-superficie-variante);
+  line-height: var(--linea-amplia);
+}
+
+/* ---------------------------------------------------------------------
+   VARIANTE: error
+   --------------------------------------------------------------------- */
+.m-estado-vacio--error .m-estado-vacio__icono {
+  color: var(--color-error);
+}
+
+.m-estado-vacio--error .m-estado-vacio__titulo {
+  color: var(--color-error);
+}
+
+/* Bloque de detalle tecnico del error, en monoespaciada. Le sirve al
+   aprendiz para ver el mensaje real que devolvio la API. */
+.m-estado-vacio__detalle {
+  max-width: 100%;
+  padding: var(--espacio-3) var(--espacio-4);
+  border-radius: var(--radio-pequeno);
+
+  background-color: var(--color-contenedor-error);
+  color: var(--color-sobre-contenedor-error);
+
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-cuerpo-pequeno);
+  text-align: left;
+
+  /* Si el mensaje es muy largo, se puede desplazar en lugar de
+     estirar el contenedor. */
+  overflow-x: auto;
+}
+
+/* Variante compacta, para usar dentro de una tarjeta pequena. */
+.m-estado-vacio--compacto {
+  padding: var(--espacio-6) var(--espacio-4);
+  gap: var(--espacio-2);
+}
+
+.m-estado-vacio--compacto .m-estado-vacio__icono {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.m-estado-vacio--compacto .m-estado-vacio__titulo {
+  font-size: var(--texto-titulo-medio);
+}

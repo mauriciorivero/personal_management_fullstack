@@ -1,0 +1,81 @@
+/* =====================================================================
+   03-atomos/_a-insignia.css
+   ---------------------------------------------------------------------
+   ATOMO: Insignia / chip (badge)
+
+   Etiqueta pequena que comunica un estado: "Activo", "Inactivo",
+   "Celular", el verbo HTTP de un endpoint, etc.
+
+   ACCESIBILIDAD: el color de fondo NUNCA es el unico portador del
+   significado. Cada insignia SIEMPRE lleva texto dentro. Alguien con
+   daltonismo no distingue el verde del rojo, pero si lee "Activo" o
+   "Inactivo".
+   ===================================================================== */
+
+.a-insignia {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+
+  padding: var(--espacio-1) var(--espacio-3);
+  border-radius: var(--radio-completo);
+
+  font-size: var(--texto-etiqueta-medio);
+  font-weight: var(--peso-medio);
+  letter-spacing: var(--letra-amplia);
+  line-height: 1.4;
+  white-space: nowrap;
+
+  /* Color por defecto: neutro. */
+  background-color: var(--color-superficie-variante);
+  color: var(--color-sobre-superficie-variante);
+}
+
+/* Variantes semanticas. */
+.a-insignia--exito {
+  background-color: var(--color-contenedor-exito);
+  color: var(--color-sobre-contenedor-exito);
+}
+
+.a-insignia--error {
+  background-color: var(--color-contenedor-error);
+  color: var(--color-sobre-contenedor-error);
+}
+
+.a-insignia--advertencia {
+  background-color: var(--color-contenedor-advertencia);
+  color: var(--color-sobre-contenedor-advertencia);
+}
+
+.a-insignia--primaria {
+  background-color: var(--color-contenedor-primario);
+  color: var(--color-sobre-contenedor-primario);
+}
+
+.a-insignia--terciaria {
+  background-color: var(--color-contenedor-terciario);
+  color: var(--color-sobre-contenedor-terciario);
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: punto indicador
+   ---------------------------------------------------------------------
+   Un circulo pequeno antes del texto. Refuerza el estado de un vistazo
+   sin depender solo del fondo.
+   --------------------------------------------------------------------- */
+.a-insignia__punto {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--radio-completo);
+
+  /* currentColor hace que el punto tome el color del texto de la
+     insignia, asi que combina solo con cualquier variante. */
+  background-color: currentColor;
+  flex-shrink: 0;
+}
+
+/* Variante monoespaciada, para mostrar id y llaves compuestas. */
+.a-insignia--mono {
+  font-family: var(--fuente-mono);
+  letter-spacing: var(--letra-normal);
+}

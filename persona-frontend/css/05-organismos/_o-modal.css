@@ -1,0 +1,206 @@
+/* =====================================================================
+   05-organismos/_o-modal.css
+   ---------------------------------------------------------------------
+   ORGANISMO: Ventana modal (dialogo)
+
+   USAMOS EL ELEMENTO NATIVO <dialog> DE HTML. Por que?
+   Porque el navegador nos regala gratis cosas que a mano cuestan
+   mucho codigo y se hacen mal casi siempre:
+
+     - showModal() atrapa el foco DENTRO del dialogo (focus trap).
+     - La tecla Escape lo cierra sola.
+     - El resto de la pagina queda inerte: no se puede tabular hacia
+       atras ni hacer clic por error.
+     - El velo lo dibuja el pseudo-elemento ::backdrop.
+     - Al cerrar, el foco vuelve solo al elemento que lo abrio.
+
+   Implementar todo eso con <div> y JavaScript son ~150 lineas y es la
+   fuente numero uno de modales inaccesibles en la web.
+   ===================================================================== */
+
+.o-modal {
+  /* El <dialog> nativo trae estilos propios del navegador; los
+     reiniciamos para poner los nuestros. */
+  padding: 0;
+  border: none;
+
+  /* ------------------------------------------------------------------
+     POR QUE HAY QUE REPONER margin: auto AQUI?
+     ------------------------------------------------------------------
+     El navegador centra el <dialog> con su hoja de estilos interna:
+     le pone inset: 0 y margin: auto, y ese margen automatico es lo
+     que lo deja en el centro de la pantalla.
+
+     Pero nuestro reset (02-base/_reset.css) incluye `* { margin: 0 }`,
+     que PISA ese margin: auto. Resultado: el modal aparece pegado a la
+     esquina superior izquierda.
+
+     Es un efecto secundario clasico de los resets agresivos: quitan
+     algo que el navegador necesitaba. La solucion no es renunciar al
+     reset, sino reponer el valor en el componente que lo necesita.
+     ------------------------------------------------------------------ */
+  margin: auto;
+
+  width: min(42rem, calc(100vw - 2rem));
+  max-height: calc(100dvh - 4rem);
+
+  border-radius: var(--radio-extra-grande);
+  background-color: var(--color-superficie-contenedor-alto);
+  color: var(--color-sobre-superficie);
+  box-shadow: var(--elevacion-4);
+
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------------------
+   El velo: ::backdrop es un pseudo-elemento que solo existe para
+   <dialog> y para los elementos en pantalla completa.
+   --------------------------------------------------------------------- */
+.o-modal::backdrop {
+  background-color: rgb(0 0 0 / 0.5);
+
+  /* backdrop-filter difumina el fondo. Es un efecto caro para la GPU,
+     asi que lo usamos solo aqui, donde aporta profundidad real. */
+  backdrop-filter: blur(2px);
+}
+
+/* Animacion de entrada. El selector [open] es el atributo que
+   showModal() agrega al elemento. */
+.o-modal[open] {
+  animation: o-modal-entrar var(--duracion-larga) var(--curva-enfatizada);
+}
+
+@keyframes o-modal-entrar {
+  from {
+    opacity: 0;
+    /* Escala ligeramente menor: el modal "crece" hacia el usuario. */
+    transform: scale(0.92) translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Estructura interna: cabecera fija, cuerpo con desplazamiento,
+   pie fijo. Es el patron correcto para un formulario largo: los
+   botones de accion siempre quedan visibles.
+   --------------------------------------------------------------------- */
+.o-modal__contenido {
+  display: flex;
+  flex-direction: column;
+  max-height: inherit;
+}
+
+.o-modal__cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espacio-4);
+
+  padding: var(--espacio-5) var(--espacio-6) var(--espacio-4);
+  flex-shrink: 0;
+}
+
+.o-modal__titulo {
+  font-size: var(--texto-titular-pequeno);
+  font-weight: var(--peso-medio);
+  color: var(--color-sobre-superficie);
+  line-height: var(--linea-ajustada);
+}
+
+.o-modal__descripcion {
+  margin-top: var(--espacio-2);
+  font-size: var(--texto-cuerpo-medio);
+  color: var(--color-sobre-superficie-variante);
+  line-height: var(--linea-normal);
+}
+
+.o-modal__cuerpo {
+  padding-inline: var(--espacio-6);
+
+  /* flex: 1 + overflow-y: auto = solo el cuerpo se desplaza. */
+  flex: 1;
+  overflow-y: auto;
+
+  /* Un poco de espacio abajo para que el ultimo campo no quede pegado
+     al pie al desplazar. */
+  padding-bottom: var(--espacio-4);
+}
+
+.o-modal__pie {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--espacio-2);
+
+  padding: var(--espacio-4) var(--espacio-6) var(--espacio-6);
+  flex-shrink: 0;
+}
+
+/* ---------------------------------------------------------------------
+   VARIANTE: dialogo de confirmacion (mas pequeno)
+   ---------------------------------------------------------------------
+   Para preguntar "Seguro que quieres eliminar?". Un borrado nunca
+   debe ocurrir con un solo clic sin confirmacion.
+   --------------------------------------------------------------------- */
+.o-modal--confirmacion {
+  width: min(28rem, calc(100vw - 2rem));
+}
+
+.o-modal--confirmacion .o-modal__cabecera {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--espacio-3);
+}
+
+/* Icono de advertencia dentro de un circulo tonal. */
+.o-modal__icono-alerta {
+  display: grid;
+  place-items: center;
+
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--radio-completo);
+
+  background-color: var(--color-contenedor-error);
+  color: var(--color-error);
+}
+
+.o-modal--confirmacion .o-modal__pie {
+  justify-content: center;
+}
+
+/* ---------------------------------------------------------------------
+   MOVIL: el modal ocupa casi toda la pantalla ("hoja inferior")
+   --------------------------------------------------------------------- */
+@media (max-width: 599px) {
+  .o-modal {
+    width: 100vw;
+    max-width: 100vw;
+    max-height: 92dvh;
+
+    /* Pegado al fondo y solo con las esquinas de arriba redondeadas:
+       es el patron "bottom sheet" de Material. */
+    margin: auto auto 0;
+    border-radius: var(--radio-extra-grande) var(--radio-extra-grande) 0 0;
+  }
+
+  .o-modal__cabecera,
+  .o-modal__cuerpo,
+  .o-modal__pie {
+    padding-inline: var(--espacio-4);
+  }
+
+  /* Los botones del pie a ancho completo y en columna invertida, para
+     que la accion principal quede arriba, al alcance del pulgar. */
+  .o-modal__pie {
+    flex-direction: column-reverse;
+  }
+
+  .o-modal__pie .a-boton {
+    width: 100%;
+  }
+}

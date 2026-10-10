@@ -1,0 +1,162 @@
+/* =====================================================================
+   05-organismos/_o-formulario.css
+   ---------------------------------------------------------------------
+   ORGANISMO: Formulario
+
+   Compone varias moleculas .m-campo-formulario en una cuadricula.
+
+   CUADRICULA RESPONSIVA SIN MEDIA QUERIES
+   ---------------------------------------------------------------------
+   Esta linea hace toda la magia:
+
+     grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+
+   Significa: "crea tantas columnas como quepan; cada una mide al
+   menos 14rem y como maximo reparte el espacio sobrante en partes
+   iguales".
+
+   Resultado automatico:
+     - pantalla de 360px -> 1 columna
+     - pantalla de 700px -> 2 columnas
+     - pantalla de 1100px-> 3 columnas
+
+   Sin escribir ni una media query. Si manana cambia el ancho del
+   modal, la cuadricula se reacomoda sola.
+   ===================================================================== */
+
+.o-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: grupo de campos
+   ---------------------------------------------------------------------
+   Usamos <fieldset> y <legend>, que son los elementos semanticos
+   correctos para agrupar campos relacionados. El lector de pantalla
+   anuncia la leyenda al entrar al grupo: "Datos personales, grupo".
+   --------------------------------------------------------------------- */
+.o-formulario__grupo {
+  /* El <fieldset> trae borde y padding propios; los quitamos. */
+  border: none;
+  padding: 0;
+  margin: 0;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: var(--espacio-4);
+}
+
+.o-formulario__leyenda {
+  /* grid-column: 1 / -1 hace que la leyenda ocupe TODAS las columnas,
+     sin importar cuantas haya generado el auto-fit. */
+  grid-column: 1 / -1;
+
+  padding: 0 0 var(--espacio-2);
+  margin-bottom: var(--espacio-1);
+
+  font-size: var(--texto-titulo-medio);
+  font-weight: var(--peso-semi);
+  color: var(--color-primario);
+  border-bottom: 1px solid var(--color-contorno-variante);
+  width: 100%;
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: resumen de errores del servidor
+   ---------------------------------------------------------------------
+   Cuando la API responde 400 con la lista de campos invalidos, la
+   mostramos completa arriba del formulario, ademas de marcar cada
+   campo.
+
+   Por que repetir la informacion? Porque si el formulario es largo,
+   el campo con error puede quedar fuera de la pantalla. El resumen
+   arriba garantiza que el usuario SEPA que algo fallo.
+
+   Lleva role="alert" y tabindex="-1" para que el JavaScript pueda
+   enfocarlo y el lector de pantalla lo lea de inmediato.
+   --------------------------------------------------------------------- */
+.o-formulario__resumen-errores {
+  display: none;
+
+  padding: var(--espacio-4);
+  border-radius: var(--radio-pequeno);
+  border-left: 4px solid var(--color-error);
+
+  background-color: var(--color-contenedor-error);
+  color: var(--color-sobre-contenedor-error);
+  font-size: var(--texto-cuerpo-medio);
+}
+
+.o-formulario__resumen-errores--visible {
+  display: block;
+}
+
+.o-formulario__resumen-titulo {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+
+  font-weight: var(--peso-semi);
+  margin-bottom: var(--espacio-2);
+}
+
+.o-formulario__resumen-lista {
+  margin: 0;
+  padding-left: var(--espacio-5);
+  line-height: var(--linea-amplia);
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: nota informativa
+   ---------------------------------------------------------------------
+   Para explicar reglas de negocio al aprendiz, como que la edad se
+   calcula automaticamente.
+   --------------------------------------------------------------------- */
+.o-formulario__nota {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espacio-3);
+
+  padding: var(--espacio-3) var(--espacio-4);
+  border-radius: var(--radio-pequeno);
+
+  background-color: var(--color-contenedor-primario);
+  color: var(--color-sobre-contenedor-primario);
+  font-size: var(--texto-cuerpo-pequeno);
+  line-height: var(--linea-normal);
+}
+
+.o-formulario__nota-icono {
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.15rem;
+  flex-shrink: 0;
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: campo calculado (solo lectura)
+   ---------------------------------------------------------------------
+   Muestra la edad que la aplicacion deduce de la fecha de nacimiento.
+   No es editable: se calcula en vivo con JavaScript y el servidor la
+   vuelve a calcular. Es un ejemplo visible de regla de negocio.
+   --------------------------------------------------------------------- */
+.o-formulario__calculado {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+
+  min-height: var(--altura-objetivo-toque);
+  padding: var(--espacio-3) var(--espacio-4);
+  border-radius: var(--radio-extra-pequeno);
+
+  background-color: var(--color-superficie-variante);
+  color: var(--color-sobre-superficie-variante);
+  font-size: var(--texto-cuerpo-grande);
+}
+
+.o-formulario__calculado strong {
+  color: var(--color-sobre-superficie);
+  font-variant-numeric: tabular-nums;
+}

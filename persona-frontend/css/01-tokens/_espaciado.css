@@ -1,0 +1,80 @@
+/* =====================================================================
+   01-tokens/_espaciado.css
+   ---------------------------------------------------------------------
+   ESCALA DE ESPACIADO, RADIOS Y PUNTOS DE QUIEBRE.
+
+   ESCALA DE 4 PUNTOS (la que usa Material Design):
+   Todos los margenes y rellenos son multiplos de 4px. Es una
+   restriccion deliberada: con solo 8 opciones, el ritmo visual de la
+   interfaz queda ordenado solo.
+
+   Usamos rem y no px para que la interfaz respete el tamanio de letra
+   que el usuario configuro en su navegador (accesibilidad).
+   1rem = 16px con la configuracion por defecto.
+   ===================================================================== */
+
+:root {
+  /* ---------- Escala de espaciado ---------- */
+  --espacio-0: 0;
+  --espacio-1: 0.25rem; /*  4px */
+  --espacio-2: 0.5rem;  /*  8px */
+  --espacio-3: 0.75rem; /* 12px */
+  --espacio-4: 1rem;    /* 16px */
+  --espacio-5: 1.25rem; /* 20px */
+  --espacio-6: 1.5rem;  /* 24px */
+  --espacio-8: 2rem;    /* 32px */
+  --espacio-10: 2.5rem; /* 40px */
+  --espacio-12: 3rem;   /* 48px */
+  --espacio-16: 4rem;   /* 64px */
+
+  /* ---------- Radios de borde ----------
+     Material 3 usa esquinas bastante redondeadas; es su rasgo visual
+     mas reconocible. */
+  --radio-ninguno: 0;
+  --radio-extra-pequeno: 4px;
+  --radio-pequeno: 8px;
+  --radio-medio: 12px;
+  --radio-grande: 16px;
+  --radio-extra-grande: 28px;
+  --radio-completo: 9999px; /* pildora o circulo perfecto */
+
+  /* ---------- Medidas de componentes ---------- */
+  --altura-barra-superior: 4rem;   /* 64px */
+  --ancho-navegacion-lateral: 16rem; /* 256px */
+  --altura-objetivo-toque: 2.75rem; /* 44px: minimo recomendado para
+                                       que un dedo acierte sin fallar */
+  --altura-campo: 3.5rem;          /* 56px: campo relleno de Material */
+
+  /* ---------- Ancho maximo de contenido ----------
+     Una linea de texto de mas de ~75 caracteres es incomoda de leer,
+     por eso limitamos el ancho del contenido. */
+  --ancho-maximo-contenido: 75rem;
+  --ancho-maximo-texto: 65ch; /* ch = ancho del caracter "0" */
+
+  /* ---------- Capas (z-index) ----------
+     Centralizar los z-index evita la "guerra de los 9999". Si todos
+     salen de aqui, el apilamiento es predecible. */
+  --capa-base: 1;
+  --capa-pegajosa: 10;
+  --capa-navegacion: 20;
+  --capa-velo: 30;
+  --capa-modal: 40;
+  --capa-notificacion: 50;
+}
+
+/* ---------------------------------------------------------------------
+   PUNTOS DE QUIEBRE (breakpoints)
+   ---------------------------------------------------------------------
+   OJO: las variables CSS NO funcionan dentro de @media. Esto NO sirve:
+
+       @media (min-width: var(--quiebre-tablet)) { ... }   <- INVALIDO
+
+   Por eso los puntos de quiebre quedan documentados aqui como
+   referencia y en el codigo se escriben con su valor literal.
+
+   Valores que usa este proyecto (enfoque "movil primero"):
+     movil    : hasta 599px   (por defecto, sin media query)
+     tablet   : desde 600px
+     escritorio: desde 905px
+     amplio   : desde 1240px
+   --------------------------------------------------------------------- */

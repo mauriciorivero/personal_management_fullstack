@@ -1,0 +1,204 @@
+/* =====================================================================
+   03-atomos/_a-boton.css
+   ---------------------------------------------------------------------
+   ATOMO: Boton
+
+   ATOMIC DESIGN - NIVEL 1: ATOMOS
+   Un atomo es el componente mas pequeno que ya no se puede dividir sin
+   perder su sentido. Un boton, un campo de texto, una etiqueta, un
+   icono. No depende de ningun otro componente para funcionar.
+
+   NOMENCLATURA DEL PROYECTO: prefijo + BEM
+   ---------------------------------------------------------------------
+     a-  atomo        .a-boton
+     m-  molecula     .m-campo-formulario
+     o-  organismo    .o-tabla-datos
+     t-  plantilla    .t-panel-administracion
+     p-  pagina       .p-usuarios
+
+   Y dentro de cada componente usamos BEM:
+
+     .a-boton            <- BLOQUE   (el componente)
+     .a-boton__icono     <- ELEMENTO (una parte interna, con __)
+     .a-boton--primario  <- MODIFICADOR (una variante, con --)
+
+   Ventaja practica: al leer una clase en el HTML sabes de inmediato
+   su nivel, si es una parte o una variante, y en que archivo buscarla.
+   El archivo de .a-boton es, siempre, 03-atomos/_a-boton.css
+   ===================================================================== */
+
+.a-boton {
+  /* Flex para alinear el icono con el texto. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-2);
+
+  /* Altura minima de 44px: el area de toque recomendada para que un
+     dedo acierte sin fallar (criterio WCAG 2.5.5). */
+  min-height: var(--altura-objetivo-toque);
+  padding: var(--espacio-2) var(--espacio-6);
+
+  /* Pildora: el rasgo visual mas caracteristico de Material 3. */
+  border-radius: var(--radio-completo);
+
+  font-size: var(--texto-etiqueta-grande);
+  font-weight: var(--peso-medio);
+  letter-spacing: var(--letra-amplia);
+  line-height: 1.25;
+  white-space: nowrap;
+
+  cursor: pointer;
+  transition: var(--transicion-normal);
+
+  /* position: relative prepara el terreno para la "capa de estado"
+     (el ::before de abajo), que se posiciona de forma absoluta. */
+  position: relative;
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------------------
+   CAPA DE ESTADO (state layer)
+   ---------------------------------------------------------------------
+   Material no cambia el color del boton al pasar el puntero: le
+   superpone una capa del color del TEXTO con una opacidad baja.
+
+   Por que es mejor que cambiar el background?
+   Porque funciona igual para todas las variantes del boton sin tener
+   que calcular un color de hover distinto para cada una. Una sola
+   regla cubre el boton relleno, el de contorno y el de texto.
+   --------------------------------------------------------------------- */
+.a-boton::before {
+  content: "";
+  position: absolute;
+  inset: 0; /* atajo de top/right/bottom/left: 0 */
+
+  background-color: currentColor;
+  opacity: 0;
+  transition: opacity var(--duracion-corta) var(--curva-estandar);
+
+  /* Sin esto, la capa robaria los clics destinados al boton. */
+  pointer-events: none;
+}
+
+.a-boton:hover::before {
+  opacity: var(--opacidad-hover);
+}
+
+.a-boton:active::before {
+  opacity: var(--opacidad-presionado);
+}
+
+/* ---------------------------------------------------------------------
+   VARIANTE: relleno (filled). Es el boton de la accion PRINCIPAL.
+   Regla de oro: solo UN boton relleno por pantalla o por dialogo. Si
+   todo es principal, nada lo es.
+   --------------------------------------------------------------------- */
+.a-boton--primario {
+  background-color: var(--color-primario);
+  color: var(--color-sobre-primario);
+  box-shadow: var(--elevacion-0);
+}
+
+.a-boton--primario:hover {
+  box-shadow: var(--elevacion-1);
+}
+
+/* ---------------------------------------------------------------------
+   VARIANTE: tonal. Menos peso que el relleno, mas que el de contorno.
+   Para acciones secundarias importantes.
+   --------------------------------------------------------------------- */
+.a-boton--tonal {
+  background-color: var(--color-contenedor-secundario);
+  color: var(--color-sobre-contenedor-secundario);
+}
+
+/* ---------------------------------------------------------------------
+   VARIANTE: contorno (outlined). Acciones secundarias.
+   --------------------------------------------------------------------- */
+.a-boton--contorno {
+  background-color: transparent;
+  color: var(--color-primario);
+  border: 1px solid var(--color-contorno);
+}
+
+.a-boton--contorno:hover {
+  border-color: var(--color-primario);
+}
+
+/* ---------------------------------------------------------------------
+   VARIANTE: texto. La de menor jerarquia. Para "Cancelar", "Ver mas".
+   --------------------------------------------------------------------- */
+.a-boton--texto {
+  background-color: transparent;
+  color: var(--color-primario);
+  padding-inline: var(--espacio-3);
+}
+
+/* ---------------------------------------------------------------------
+   VARIANTE: peligro. Para acciones destructivas (eliminar).
+   El color rojo funciona como advertencia visual antes del clic.
+   --------------------------------------------------------------------- */
+.a-boton--peligro {
+  background-color: var(--color-error);
+  color: var(--color-sobre-error);
+}
+
+/* ---------------------------------------------------------------------
+   VARIANTE: icono. Un boton cuadrado que solo contiene un icono.
+   SIEMPRE necesita aria-label, porque no tiene texto visible que el
+   lector de pantalla pueda anunciar.
+   --------------------------------------------------------------------- */
+.a-boton--icono {
+  width: var(--altura-objetivo-toque);
+  min-width: var(--altura-objetivo-toque);
+  padding: 0;
+  border-radius: var(--radio-completo);
+  color: var(--color-sobre-superficie-variante);
+}
+
+.a-boton--icono-pequeno {
+  width: 2.25rem;
+  min-width: 2.25rem;
+  min-height: 2.25rem;
+}
+
+/* ---------------------------------------------------------------------
+   MODIFICADOR: ancho completo. Util en moviles y dentro de modales.
+   --------------------------------------------------------------------- */
+.a-boton--bloque {
+  display: flex;
+  width: 100%;
+}
+
+/* ---------------------------------------------------------------------
+   ESTADO: deshabilitado
+   ---------------------------------------------------------------------
+   Usamos el atributo [disabled] y no una clase, porque el atributo
+   tambien impide el clic y saca el boton del orden de tabulacion.
+   Una clase solo cambiaria el aspecto: el boton seguiria siendo
+   funcional, lo cual es un error de accesibilidad.
+   --------------------------------------------------------------------- */
+.a-boton[disabled],
+.a-boton[aria-disabled="true"] {
+  opacity: var(--opacidad-deshabilitado);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Un boton deshabilitado no reacciona al puntero. */
+.a-boton[disabled]::before,
+.a-boton[aria-disabled="true"]::before {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: icono interno del boton
+   --------------------------------------------------------------------- */
+.a-boton__icono {
+  width: 1.125rem;
+  height: 1.125rem;
+
+  /* flex-shrink: 0 evita que el icono se achique si el texto es largo. */
+  flex-shrink: 0;
+}

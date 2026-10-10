@@ -1,0 +1,166 @@
+/* =====================================================================
+   05-organismos/_o-barra-superior.css
+   ---------------------------------------------------------------------
+   ORGANISMO: Barra superior de la aplicacion (app bar)
+
+   ATOMIC DESIGN - NIVEL 3: ORGANISMOS
+   Un organismo es una seccion COMPLETA y autonoma de la interfaz.
+   Combina atomos y moleculas y ya tiene identidad propia: "la barra
+   superior", "la tabla de usuarios", "el formulario de registro".
+
+   Como distinguir una molecula de un organismo?
+     Molecula  -> cumple UNA funcion simple (un campo que valida).
+     Organismo -> es una PIEZA de la pagina que podrias nombrar en una
+                  reunion: "hay que cambiar la barra superior".
+
+   Este organismo contiene: el titulo de la aplicacion, el boton del
+   menu lateral (solo en movil) y el conmutador de tema.
+   ===================================================================== */
+
+.o-barra-superior {
+  /* position: sticky mantiene la barra visible al desplazar la pagina,
+     pero -a diferencia de fixed- SI ocupa su espacio en el layout, asi
+     que no tapa el contenido de arriba. */
+  position: sticky;
+  top: 0;
+  z-index: var(--capa-navegacion);
+
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+
+  height: var(--altura-barra-superior);
+  padding-inline: var(--espacio-4);
+
+  background-color: var(--color-superficie-contenedor);
+  color: var(--color-sobre-superficie);
+
+  /* La sombra aparece solo al desplazar (la agrega el JavaScript con
+     el modificador --elevada). En reposo la barra se ve plana, como
+     indica Material 3. */
+  box-shadow: var(--elevacion-0);
+  transition: box-shadow var(--duracion-media) var(--curva-estandar);
+}
+
+.o-barra-superior--elevada {
+  box-shadow: var(--elevacion-2);
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: marca (logo + nombre)
+   --------------------------------------------------------------------- */
+.o-barra-superior__marca {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+
+  /* margin-right: auto empuja todo lo demas hacia la derecha. Es mas
+     limpio que poner justify-content: space-between cuando hay tres
+     grupos de elementos. */
+  margin-right: auto;
+  min-width: 0;
+}
+
+.o-barra-superior__logo {
+  display: grid;
+  place-items: center; /* centra en los dos ejes a la vez */
+
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radio-pequeno);
+
+  background-color: var(--color-primario);
+  color: var(--color-sobre-primario);
+  flex-shrink: 0;
+}
+
+.o-barra-superior__titulo {
+  font-size: var(--texto-titulo-grande);
+  font-weight: var(--peso-medio);
+  letter-spacing: var(--letra-ajustada);
+
+  /* Las tres propiedades del "corte con puntos suspensivos": si el
+     titulo no cabe, se recorta con "..." en lugar de desbordar. */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.o-barra-superior__subtitulo {
+  /* Oculto en movil: no es informacion esencial. */
+  display: none;
+  font-size: var(--texto-cuerpo-pequeno);
+  color: var(--color-sobre-superficie-variante);
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: acciones de la derecha
+   --------------------------------------------------------------------- */
+.o-barra-superior__acciones {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-1);
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: indicador del estado de la API
+   ---------------------------------------------------------------------
+   Punto de color que avisa si la API responde. Para el aprendiz es
+   util: si el punto esta rojo, el problema es el backend, no el
+   frontend.
+   --------------------------------------------------------------------- */
+.o-barra-superior__estado {
+  display: none;
+  align-items: center;
+  gap: var(--espacio-2);
+
+  padding: var(--espacio-1) var(--espacio-3);
+  border-radius: var(--radio-completo);
+
+  background-color: var(--color-superficie-contenedor-alto);
+  font-size: var(--texto-etiqueta-medio);
+  color: var(--color-sobre-superficie-variante);
+}
+
+.o-barra-superior__estado-punto {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--radio-completo);
+  background-color: var(--color-contorno);
+  flex-shrink: 0;
+  transition: background-color var(--duracion-media) var(--curva-estandar);
+}
+
+.o-barra-superior__estado-punto--conectado {
+  background-color: var(--color-exito);
+
+  /* Latido suave para que se note que esta "vivo". */
+  animation: o-barra-latido 2s ease-in-out infinite;
+}
+
+.o-barra-superior__estado-punto--desconectado {
+  background-color: var(--color-error);
+}
+
+@keyframes o-barra-latido {
+  50% { opacity: 0.45; }
+}
+
+/* ---------------------------------------------------------------------
+   El boton del menu solo existe en movil: en escritorio la navegacion
+   lateral esta siempre visible.
+   --------------------------------------------------------------------- */
+@media (min-width: 905px) {
+  .o-barra-superior__menu {
+    display: none;
+  }
+
+  .o-barra-superior__subtitulo,
+  .o-barra-superior__estado {
+    display: flex;
+  }
+
+  .o-barra-superior {
+    padding-inline: var(--espacio-6);
+  }
+}

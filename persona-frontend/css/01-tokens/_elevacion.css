@@ -1,0 +1,69 @@
+/* =====================================================================
+   01-tokens/_elevacion.css
+   ---------------------------------------------------------------------
+   ELEVACION Y MOVIMIENTO.
+
+   QUE ES LA ELEVACION EN MATERIAL DESIGN?
+   Material se llama asi porque simula hojas de papel apiladas. Cada
+   hoja tiene una altura (elevacion) sobre el fondo, y esa altura se
+   comunica con una sombra. Mas elevacion = mas sombra = mas cerca del
+   usuario = mas importante.
+
+   Niveles y su uso en esta aplicacion:
+     0 -> superficie plana (el fondo de la pagina)
+     1 -> tarjetas en reposo
+     2 -> tarjeta con el puntero encima, barra superior al desplazar
+     3 -> menus desplegables, notificaciones
+     4 -> dialogos y modales
+     5 -> elementos arrastrados por el usuario
+
+   Cada sombra lleva DOS capas: una sombra ajustada y oscura (la
+   "sombra clave") y otra amplia y difusa (la "sombra de ambiente").
+   Esa combinacion es lo que hace que la sombra se vea real y no como
+   una mancha gris.
+   ===================================================================== */
+
+:root {
+  --elevacion-0: none;
+
+  --elevacion-1:
+    0 1px 2px 0 rgb(var(--color-sombra) / 0.3),
+    0 1px 3px 1px rgb(var(--color-sombra) / 0.15);
+
+  --elevacion-2:
+    0 1px 2px 0 rgb(var(--color-sombra) / 0.3),
+    0 2px 6px 2px rgb(var(--color-sombra) / 0.15);
+
+  --elevacion-3:
+    0 4px 8px 3px rgb(var(--color-sombra) / 0.15),
+    0 1px 3px 0 rgb(var(--color-sombra) / 0.3);
+
+  --elevacion-4:
+    0 6px 10px 4px rgb(var(--color-sombra) / 0.15),
+    0 2px 3px 0 rgb(var(--color-sombra) / 0.3);
+
+  --elevacion-5:
+    0 8px 12px 6px rgb(var(--color-sombra) / 0.15),
+    0 4px 4px 0 rgb(var(--color-sombra) / 0.3);
+
+  /* ---------- Duraciones de animacion ----------
+     Material clasifica las transiciones por distancia recorrida:
+     un cambio de color es "corto", abrir un modal es "largo".
+     Mas de 500ms se percibe lento; menos de 100ms, brusco. */
+  --duracion-corta: 100ms;
+  --duracion-media: 200ms;
+  --duracion-larga: 300ms;
+  --duracion-extra-larga: 500ms;
+
+  /* ---------- Curvas de aceleracion (easing) ----------
+     Un movimiento lineal se ve mecanico. Material usa curvas donde el
+     elemento entra rapido y frena suave, imitando la fisica real. */
+  --curva-estandar: cubic-bezier(0.2, 0, 0, 1);
+  --curva-acelerada: cubic-bezier(0.3, 0, 1, 1);
+  --curva-desacelerada: cubic-bezier(0, 0, 0, 1);
+  --curva-enfatizada: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Transiciones listas para usar. */
+  --transicion-rapida: all var(--duracion-corta) var(--curva-estandar);
+  --transicion-normal: all var(--duracion-media) var(--curva-estandar);
+}

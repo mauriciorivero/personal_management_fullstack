@@ -1,0 +1,157 @@
+/* =====================================================================
+   04-moleculas/_m-tarjeta.css
+   ---------------------------------------------------------------------
+   MOLECULA: Tarjeta (card)
+
+   Contenedor con superficie propia, elevacion y esquinas redondeadas.
+   Es el envoltorio mas usado de Material Design: agrupa informacion
+   relacionada y la separa visualmente del resto.
+
+   Variantes de Material 3:
+     elevada  -> con sombra (la de este proyecto por defecto)
+     rellena  -> fondo tonal, sin sombra
+     contorno -> solo borde, sin sombra ni fondo
+   ===================================================================== */
+
+.m-tarjeta {
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--color-superficie);
+  border-radius: var(--radio-medio);
+  box-shadow: var(--elevacion-1);
+
+  /* overflow: hidden recorta lo que sobresalga (una imagen de cabecera,
+     por ejemplo) para que respete las esquinas redondeadas. */
+  overflow: hidden;
+
+  transition:
+    box-shadow var(--duracion-media) var(--curva-estandar),
+    transform var(--duracion-media) var(--curva-estandar);
+}
+
+/* ---------------------------------------------------------------------
+   MODIFICADOR: interactiva
+   ---------------------------------------------------------------------
+   Solo para tarjetas en las que SE PUEDE hacer clic. Si una tarjeta
+   no es clicable, no debe reaccionar al puntero: moverse sin razon
+   confunde al usuario y le hace creer que puede pulsarla.
+   --------------------------------------------------------------------- */
+.m-tarjeta--interactiva {
+  cursor: pointer;
+}
+
+.m-tarjeta--interactiva:hover {
+  box-shadow: var(--elevacion-2);
+
+  /* Se eleva 2px. Un movimiento muy pequeno, suficiente para que el
+     ojo lo note sin que se sienta exagerado. */
+  transform: translateY(-2px);
+}
+
+/* ---------------------------------------------------------------------
+   VARIANTES de superficie
+   --------------------------------------------------------------------- */
+.m-tarjeta--rellena {
+  background-color: var(--color-superficie-contenedor);
+  box-shadow: var(--elevacion-0);
+}
+
+.m-tarjeta--contorno {
+  background-color: var(--color-superficie);
+  border: 1px solid var(--color-contorno-variante);
+  box-shadow: var(--elevacion-0);
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTOS internos
+   --------------------------------------------------------------------- */
+.m-tarjeta__cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espacio-4);
+
+  padding: var(--espacio-4) var(--espacio-5);
+  border-bottom: 1px solid var(--color-contorno-variante);
+}
+
+.m-tarjeta__titulo {
+  font-size: var(--texto-titulo-grande);
+  font-weight: var(--peso-medio);
+  color: var(--color-sobre-superficie);
+  line-height: var(--linea-ajustada);
+}
+
+.m-tarjeta__subtitulo {
+  margin-top: var(--espacio-1);
+  font-size: var(--texto-cuerpo-medio);
+  color: var(--color-sobre-superficie-variante);
+}
+
+.m-tarjeta__cuerpo {
+  padding: var(--espacio-5);
+
+  /* flex: 1 hace que el cuerpo se estire y empuje el pie hacia abajo.
+     Asi, varias tarjetas en una fila tienen los pies alineados aunque
+     su contenido mida distinto. */
+  flex: 1;
+}
+
+.m-tarjeta__cuerpo--compacto {
+  padding: var(--espacio-4);
+}
+
+.m-tarjeta__pie {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--espacio-2);
+
+  padding: var(--espacio-3) var(--espacio-5);
+  border-top: 1px solid var(--color-contorno-variante);
+  background-color: var(--color-superficie-contenedor-bajo);
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: fila de dato (etiqueta + valor)
+   ---------------------------------------------------------------------
+   Patron muy comun en las fichas de detalle. Se usa dentro de un
+   <dl> (lista de definiciones), que es el elemento HTML semantico
+   correcto para pares clave/valor.
+   --------------------------------------------------------------------- */
+.m-tarjeta__dato {
+  display: grid;
+
+  /* En movil, etiqueta arriba y valor abajo. */
+  gap: var(--espacio-1);
+  padding-block: var(--espacio-2);
+  border-bottom: 1px solid var(--color-contorno-variante);
+}
+
+/* La ultima fila no necesita linea separadora. */
+.m-tarjeta__dato:last-child {
+  border-bottom: none;
+}
+
+.m-tarjeta__dato-etiqueta {
+  font-size: var(--texto-etiqueta-medio);
+  font-weight: var(--peso-medio);
+  text-transform: uppercase;
+  letter-spacing: var(--letra-muy-amplia);
+  color: var(--color-sobre-superficie-variante);
+}
+
+.m-tarjeta__dato-valor {
+  font-size: var(--texto-cuerpo-grande);
+  color: var(--color-sobre-superficie);
+}
+
+/* Desde tablet, etiqueta y valor en dos columnas. */
+@media (min-width: 600px) {
+  .m-tarjeta__dato {
+    grid-template-columns: 11rem 1fr;
+    gap: var(--espacio-4);
+    align-items: baseline;
+  }
+}

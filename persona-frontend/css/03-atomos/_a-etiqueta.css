@@ -1,0 +1,51 @@
+/* =====================================================================
+   03-atomos/_a-etiqueta.css
+   ---------------------------------------------------------------------
+   ATOMO: Etiqueta de campo (<label>)
+
+   Una etiqueta no es decoracion: es el nexo de accesibilidad entre el
+   texto y el control. Al conectarla con el atributo `for`, el lector
+   de pantalla anuncia "Primer nombre, campo de texto" y, ademas, al
+   hacer clic en el texto el foco salta al campo.
+
+   REGLA: todo control de formulario necesita su <label>. Un
+   placeholder NO reemplaza a una etiqueta, porque desaparece en
+   cuanto el usuario empieza a escribir.
+   ===================================================================== */
+
+.a-etiqueta {
+  display: block;
+  margin-bottom: var(--espacio-2);
+
+  font-size: var(--texto-etiqueta-grande);
+  font-weight: var(--peso-medio);
+  color: var(--color-sobre-superficie);
+  letter-spacing: var(--letra-normal);
+
+  /* Permite hacer clic en la etiqueta para enfocar el campo. */
+  cursor: pointer;
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: marca de campo obligatorio
+   ---------------------------------------------------------------------
+   El asterisco se agrega con ::after y lleva aria-hidden implicito
+   (el contenido generado por CSS no lo leen los lectores de pantalla).
+
+   Por eso el campo tambien lleva el atributo `required`: esa es la
+   informacion que de verdad recibe la tecnologia asistiva. El
+   asterisco es solo la pista visual.
+   --------------------------------------------------------------------- */
+.a-etiqueta--obligatoria::after {
+  content: " *";
+  color: var(--color-error);
+  font-weight: var(--peso-negrita);
+}
+
+/* Variante pequena, para etiquetas dentro de tablas o tarjetas. */
+.a-etiqueta--pequena {
+  font-size: var(--texto-etiqueta-medio);
+  text-transform: uppercase;
+  letter-spacing: var(--letra-muy-amplia);
+  color: var(--color-sobre-superficie-variante);
+}

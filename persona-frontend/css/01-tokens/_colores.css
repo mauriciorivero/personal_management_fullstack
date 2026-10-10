@@ -1,0 +1,196 @@
+/* =====================================================================
+   01-tokens/_colores.css
+   ---------------------------------------------------------------------
+   PALETA DEL SISTEMA DE DISENIO, basada en Material Design 3.
+
+   QUE ES UN TOKEN DE DISENIO?
+   Es una variable con un nombre SEMANTICO en lugar de un valor suelto.
+
+     MAL:  color: #6750a4;        <- que es ese color? donde mas se usa?
+     BIEN: color: var(--color-primario);
+
+   Si el cliente pide cambiar el morado por un azul, se cambia UNA
+   linea aqui y toda la aplicacion se actualiza. Sin tokens habria que
+   buscar y reemplazar el hexadecimal en 30 archivos.
+
+   NOMENCLATURA DE MATERIAL DESIGN 3 (roles de color):
+     primario            -> acciones principales (botones, enlaces)
+     sobre-primario      -> texto que va ENCIMA del primario
+     contenedor-primario -> fondos suaves con el tono del primario
+     superficie          -> fondo de tarjetas y paneles
+     contorno            -> bordes y separadores
+
+   La palabra "sobre" (del ingles "on") indica que ese color esta
+   pensado para ir ENCIMA del otro, con contraste suficiente para
+   cumplir la norma de accesibilidad WCAG AA (relacion 4.5:1).
+   ===================================================================== */
+
+:root {
+  /* ---------- Color primario (morado Material) ---------- */
+  --color-primario: #6750a4;
+  --color-sobre-primario: #ffffff;
+  --color-contenedor-primario: #eaddff;
+  --color-sobre-contenedor-primario: #21005d;
+
+  /* ---------- Color secundario (acentos y chips) ---------- */
+  --color-secundario: #625b71;
+  --color-sobre-secundario: #ffffff;
+  --color-contenedor-secundario: #e8def8;
+  --color-sobre-contenedor-secundario: #1d192b;
+
+  /* ---------- Color terciario (datos y graficos) ---------- */
+  --color-terciario: #7d5260;
+  --color-contenedor-terciario: #ffd8e4;
+  --color-sobre-contenedor-terciario: #31111d;
+
+  /* ---------- Error ---------- */
+  --color-error: #b3261e;
+  --color-sobre-error: #ffffff;
+  --color-contenedor-error: #f9dedc;
+  --color-sobre-contenedor-error: #410e0b;
+
+  /* ---------- Exito y advertencia (no son de Material 3,
+                los agregamos porque la app los necesita) ---------- */
+  --color-exito: #1b6b3a;
+  --color-contenedor-exito: #d7f5e2;
+  --color-sobre-contenedor-exito: #042913;
+
+  --color-advertencia: #8a5300;
+  --color-contenedor-advertencia: #ffeccd;
+  --color-sobre-contenedor-advertencia: #2b1700;
+
+  /* ---------- Superficies (fondos) ---------- */
+  --color-fondo: #fef7ff;
+  --color-sobre-fondo: #1d1b20;
+  --color-superficie: #ffffff;
+  --color-sobre-superficie: #1d1b20;
+
+  /* Variantes de superficie para crear jerarquia por elevacion. */
+  --color-superficie-variante: #e7e0ec;
+  --color-sobre-superficie-variante: #49454f;
+  --color-superficie-contenedor-bajo: #f7f2fa;
+  --color-superficie-contenedor: #f3edf7;
+  --color-superficie-contenedor-alto: #ece6f0;
+
+  /* ---------- Contornos ---------- */
+  --color-contorno: #79747e;
+  --color-contorno-variante: #cac4d0;
+
+  /* ---------- Capas de estado (state layers) ---------- */
+  /* Material superpone el color del elemento con una opacidad baja
+     para indicar hover, focus o pressed. Estos son los valores
+     oficiales de la especificacion. */
+  --opacidad-hover: 0.08;
+  --opacidad-foco: 0.12;
+  --opacidad-presionado: 0.12;
+  --opacidad-deshabilitado: 0.38;
+
+  /* Sombra base para las elevaciones. */
+  --color-sombra: 0 0 0;
+}
+
+/* ---------------------------------------------------------------------
+   TEMA OSCURO
+   ---------------------------------------------------------------------
+   Se aplica con DOS selectores, y el orden importa:
+
+   1. @media (prefers-color-scheme: dark) + :root:not([data-tema="light"])
+      -> sigue la preferencia del sistema operativo, salvo que el
+         usuario haya elegido explicitamente el tema claro.
+
+   2. :root[data-tema="dark"]
+      -> el usuario eligio oscuro a mano con el boton de la barra.
+
+   Fijate que en Material 3 el tema oscuro NO es "invertir los colores":
+   el primario se vuelve mas claro y menos saturado, porque un morado
+   oscuro sobre fondo negro no tendria contraste suficiente.
+   --------------------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="light"]) {
+    --color-primario: #d0bcff;
+    --color-sobre-primario: #381e72;
+    --color-contenedor-primario: #4f378b;
+    --color-sobre-contenedor-primario: #eaddff;
+
+    --color-secundario: #ccc2dc;
+    --color-sobre-secundario: #332d41;
+    --color-contenedor-secundario: #4a4458;
+    --color-sobre-contenedor-secundario: #e8def8;
+
+    --color-terciario: #efb8c8;
+    --color-contenedor-terciario: #633b48;
+    --color-sobre-contenedor-terciario: #ffd8e4;
+
+    --color-error: #f2b8b5;
+    --color-sobre-error: #601410;
+    --color-contenedor-error: #8c1d18;
+    --color-sobre-contenedor-error: #f9dedc;
+
+    --color-exito: #7adf9f;
+    --color-contenedor-exito: #0f4d28;
+    --color-sobre-contenedor-exito: #d7f5e2;
+
+    --color-advertencia: #ffcf8b;
+    --color-contenedor-advertencia: #5d3a00;
+    --color-sobre-contenedor-advertencia: #ffeccd;
+
+    --color-fondo: #141218;
+    --color-sobre-fondo: #e6e0e9;
+    --color-superficie: #1d1b20;
+    --color-sobre-superficie: #e6e0e9;
+
+    --color-superficie-variante: #49454f;
+    --color-sobre-superficie-variante: #cac4d0;
+    --color-superficie-contenedor-bajo: #1d1b20;
+    --color-superficie-contenedor: #211f26;
+    --color-superficie-contenedor-alto: #2b2930;
+
+    --color-contorno: #938f99;
+    --color-contorno-variante: #49454f;
+  }
+}
+
+/* Tema oscuro forzado por el usuario. Repetimos los valores porque un
+   @media no se puede "reutilizar" desde otro selector en CSS puro. */
+:root[data-tema="dark"] {
+  --color-primario: #d0bcff;
+  --color-sobre-primario: #381e72;
+  --color-contenedor-primario: #4f378b;
+  --color-sobre-contenedor-primario: #eaddff;
+
+  --color-secundario: #ccc2dc;
+  --color-sobre-secundario: #332d41;
+  --color-contenedor-secundario: #4a4458;
+  --color-sobre-contenedor-secundario: #e8def8;
+
+  --color-terciario: #efb8c8;
+  --color-contenedor-terciario: #633b48;
+  --color-sobre-contenedor-terciario: #ffd8e4;
+
+  --color-error: #f2b8b5;
+  --color-sobre-error: #601410;
+  --color-contenedor-error: #8c1d18;
+  --color-sobre-contenedor-error: #f9dedc;
+
+  --color-exito: #7adf9f;
+  --color-contenedor-exito: #0f4d28;
+  --color-sobre-contenedor-exito: #d7f5e2;
+
+  --color-advertencia: #ffcf8b;
+  --color-contenedor-advertencia: #5d3a00;
+  --color-sobre-contenedor-advertencia: #ffeccd;
+
+  --color-fondo: #141218;
+  --color-sobre-fondo: #e6e0e9;
+  --color-superficie: #1d1b20;
+  --color-sobre-superficie: #e6e0e9;
+
+  --color-superficie-variante: #49454f;
+  --color-sobre-superficie-variante: #cac4d0;
+  --color-superficie-contenedor-bajo: #1d1b20;
+  --color-superficie-contenedor: #211f26;
+  --color-superficie-contenedor-alto: #2b2930;
+
+  --color-contorno: #938f99;
+  --color-contorno-variante: #49454f;
+}

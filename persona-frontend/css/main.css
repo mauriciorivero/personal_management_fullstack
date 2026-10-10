@@ -1,0 +1,80 @@
+/* =====================================================================
+   main.css
+   ---------------------------------------------------------------------
+   PUNTO DE ENTRADA DE TODOS LOS ESTILOS.
+
+   Es el unico archivo CSS que enlaza el index.html. Importa el resto
+   en un ORDEN ESTRICTO, que es la clave de todo el sistema.
+
+   POR QUE IMPORTA EL ORDEN?
+   Por la CASCADA de CSS: cuando dos reglas tienen la misma
+   especificidad, GANA LA ULTIMA que se declaro. Si los atomos se
+   cargaran despues de los organismos, un organismo no podria
+   organizar nada.
+
+   El orden va de lo mas GENERICO a lo mas ESPECIFICO:
+
+     1. 01-tokens      variables (no generan ni una regla visible)
+     2. 02-base        reset y estilos de elementos HTML
+     3. 03-atomos      componentes indivisibles
+     4. 04-moleculas   grupos de atomos
+     5. 05-organismos  secciones completas
+     6. 06-plantillas  estructura de la pagina
+     7. 07-paginas     ajustes puntuales de cada vista
+
+   Esta estructura es una adaptacion del Atomic Design de Brad Frost
+   sobre la arquitectura ITCSS (Inverted Triangle CSS) de Harry
+   Roberts: el "triangulo invertido" describe justamente eso, que el
+   alcance de las reglas se va estrechando a medida que se baja.
+
+   NOTA DE RENDIMIENTO
+   ---------------------------------------------------------------------
+   @import dispara una peticion HTTP por archivo (aqui, 23). En
+   desarrollo es perfecto: cada componente en su archivo, facil de
+   encontrar y de explicar.
+
+   Para produccion se usaria una herramienta (PostCSS, Vite, o incluso
+   el comando `cat`) que concatene los 23 archivos en uno solo
+   minificado. Mantenemos @import a proposito: el objetivo de este
+   proyecto es que se VEA la arquitectura, no exprimir milisegundos.
+   ===================================================================== */
+
+/* ---------- 1. TOKENS: el sistema de diseno ---------- */
+@import url("01-tokens/_colores.css");
+@import url("01-tokens/_tipografia.css");
+@import url("01-tokens/_espaciado.css");
+@import url("01-tokens/_elevacion.css");
+
+/* ---------- 2. BASE: reset y elementos HTML ---------- */
+@import url("02-base/_reset.css");
+@import url("02-base/_base.css");
+
+/* ---------- 3. ATOMOS ---------- */
+@import url("03-atomos/_a-boton.css");
+@import url("03-atomos/_a-campo-texto.css");
+@import url("03-atomos/_a-etiqueta.css");
+@import url("03-atomos/_a-icono.css");
+@import url("03-atomos/_a-insignia.css");
+@import url("03-atomos/_a-cargador.css");
+
+/* ---------- 4. MOLECULAS ---------- */
+@import url("04-moleculas/_m-campo-formulario.css");
+@import url("04-moleculas/_m-tarjeta.css");
+@import url("04-moleculas/_m-notificacion.css");
+@import url("04-moleculas/_m-barra-busqueda.css");
+@import url("04-moleculas/_m-paginador.css");
+@import url("04-moleculas/_m-estado-vacio.css");
+
+/* ---------- 5. ORGANISMOS ---------- */
+@import url("05-organismos/_o-barra-superior.css");
+@import url("05-organismos/_o-navegacion-lateral.css");
+@import url("05-organismos/_o-tabla-datos.css");
+@import url("05-organismos/_o-modal.css");
+@import url("05-organismos/_o-formulario.css");
+@import url("05-organismos/_o-panel-detalle.css");
+
+/* ---------- 6. PLANTILLAS ---------- */
+@import url("06-plantillas/_t-panel-administracion.css");
+
+/* ---------- 7. PAGINAS ---------- */
+@import url("07-paginas/_p-recursos.css");

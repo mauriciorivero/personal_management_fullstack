@@ -1,0 +1,201 @@
+/* =====================================================================
+   02-base/_reset.css
+   ---------------------------------------------------------------------
+   REINICIO (reset) de los estilos por defecto del navegador.
+
+   POR QUE HACE FALTA?
+   Cada navegador trae su propia hoja de estilos. Chrome, Firefox y
+   Safari ponen margenes distintos a un <h1> y rellenos distintos a un
+   <button>. El reset los pone a todos en el mismo punto de partida,
+   para que lo que disenamos se vea igual en todos.
+
+   Este reset es moderno y minimo: no borra TODO (como el viejo
+   reset de Eric Meyer), solo normaliza lo que de verdad estorba.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   1. Modelo de caja predecible
+   ---------------------------------------------------------------------
+   Por defecto, un elemento con width: 200px y padding: 20px mide
+   240px en total. Es contraintuitivo y produce desbordes constantes.
+
+   Con border-box, el padding y el borde van DENTRO del ancho
+   declarado: width: 200px mide 200px, punto. Es la primera regla que
+   escribe cualquier desarrollador frontend.
+   --------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------------------
+   2. Quitar los margenes por defecto
+   ---------------------------------------------------------------------
+   Los navegadores ponen margin a titulos, parrafos y listas. Preferimos
+   partir de cero y declarar el espaciado nosotros con los tokens, para
+   no andar "peleando" con margenes que no pedimos.
+   --------------------------------------------------------------------- */
+* {
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------------
+   3. Base del documento
+   --------------------------------------------------------------------- */
+html {
+  /* Desplazamiento suave al navegar con enlaces internos. */
+  scroll-behavior: smooth;
+
+  /* -webkit-text-size-adjust evita que Safari en iOS agrande el texto
+     solo al girar el telefono a horizontal. */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  /* min-height: 100dvh usa la unidad "dynamic viewport height", que SI
+     descuenta la barra de direcciones del navegador movil. Con 100vh,
+     en iOS quedaba un hueco al final de la pagina. */
+  min-height: 100dvh;
+
+  /* Suavizado de fuentes: hace el texto mas nitido en pantallas Retina. */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------------------------------------------------------------------
+   4. Contenido multimedia
+   ---------------------------------------------------------------------
+   display: block quita el espacio fantasma que deja el navegador
+   debajo de una imagen (porque la trata como texto en linea).
+   max-width: 100% evita que una imagen grande rompa el diseno.
+   --------------------------------------------------------------------- */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* ---------------------------------------------------------------------
+   5. Formularios
+   ---------------------------------------------------------------------
+   Los controles de formulario NO heredan la fuente del documento: el
+   navegador les pone su propia fuente del sistema. Hay que decirselo
+   de forma explicita o los inputs se ven distintos al resto del texto.
+   --------------------------------------------------------------------- */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  /* Reiniciamos el aspecto nativo para construir el nuestro. */
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  /* Evita la seleccion accidental del texto al hacer doble clic. */
+  user-select: none;
+
+  /* Quita el retardo de 300ms al tocar en moviles. */
+  touch-action: manipulation;
+}
+
+/* ---------------------------------------------------------------------
+   6. Texto largo sin espacios
+   ---------------------------------------------------------------------
+   overflow-wrap: break-word parte las palabras larguisimas (una URL
+   sin espacios, por ejemplo) para que no desborden su contenedor.
+   --------------------------------------------------------------------- */
+p,
+h1, h2, h3, h4, h5, h6,
+li,
+td, th {
+  overflow-wrap: break-word;
+}
+
+/* Los titulos no deben heredar tamanios gigantes del navegador: los
+   definimos nosotros en cada componente. */
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: var(--linea-ajustada);
+}
+
+/* ---------------------------------------------------------------------
+   7. Listas
+   ---------------------------------------------------------------------
+   Solo quitamos los puntos cuando la lista lleva la clase .lista-limpia.
+   Si los quitaramos de TODAS, los lectores de pantalla de Safari
+   dejarian de anunciarlas como listas, lo que perjudica la
+   accesibilidad.
+   --------------------------------------------------------------------- */
+ul.lista-limpia,
+ol.lista-limpia {
+  list-style: none;
+  padding: 0;
+}
+
+/* ---------------------------------------------------------------------
+   8. Tablas
+   --------------------------------------------------------------------- */
+table {
+  /* Sin esto, cada celda tendria su propio borde separado. */
+  border-collapse: collapse;
+  width: 100%;
+}
+
+/* ---------------------------------------------------------------------
+   9. Enlaces
+   --------------------------------------------------------------------- */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ---------------------------------------------------------------------
+   10. FOCO VISIBLE: accesibilidad obligatoria
+   ---------------------------------------------------------------------
+   Nunca, jamas, se escribe `outline: none` sin poner un reemplazo.
+   Quien navega con teclado (por discapacidad motriz, o simplemente
+   por rapidez) depende del contorno para saber donde esta parado.
+
+   :focus-visible es mejor que :focus porque el navegador decide: solo
+   muestra el contorno cuando se navega con TECLADO, no al hacer clic
+   con el raton. Asi se cuida la accesibilidad sin "ensuciar" la
+   interfaz del usuario de mouse.
+   --------------------------------------------------------------------- */
+:focus-visible {
+  outline: 3px solid var(--color-primario);
+  outline-offset: 2px;
+  border-radius: var(--radio-extra-pequeno);
+}
+
+/* ---------------------------------------------------------------------
+   11. Respeto por quien prefiere menos movimiento
+   ---------------------------------------------------------------------
+   Algunas personas sufren mareo o migranias con las animaciones.
+   El sistema operativo tiene un ajuste para pedir menos movimiento, y
+   es nuestra obligacion respetarlo.
+
+   No lo ponemos en 0s sino en 0.01ms: asi los eventos
+   transitionend y animationend SIGUEN disparandose y el JavaScript
+   que dependa de ellos no se rompe.
+   --------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

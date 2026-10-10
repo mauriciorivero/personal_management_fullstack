@@ -1,0 +1,70 @@
+/* =====================================================================
+   03-atomos/_a-icono.css
+   ---------------------------------------------------------------------
+   ATOMO: Icono SVG
+
+   POR QUE SVG EN LINEA Y NO UNA FUENTE DE ICONOS NI IMAGENES?
+     1. Hereda el color con currentColor: cambia solo con el tema.
+     2. Escala sin perder nitidez en cualquier pantalla.
+     3. No descarga ningun archivo: funciona sin internet.
+     4. No depende de una fuente externa que podria no cargar.
+
+   ACCESIBILIDAD: un icono decorativo lleva aria-hidden="true" para
+   que el lector de pantalla no lo anuncie. Un icono que carga
+   significado (y no tiene texto al lado) necesita un <title> dentro
+   del SVG o un aria-label en el boton que lo contiene.
+   ===================================================================== */
+
+.a-icono {
+  /* inline-block con vertical-align: middle alinea el icono con la
+     linea base del texto que lo acompana. */
+  display: inline-block;
+  vertical-align: middle;
+
+  width: 1.25rem;
+  height: 1.25rem;
+
+  /* La clave de todo: el icono toma el color del texto del padre.
+     Un solo SVG sirve para el tema claro y el oscuro. */
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  flex-shrink: 0;
+}
+
+/* Tamanios. Mantenemos pocas opciones a proposito. */
+.a-icono--pequeno {
+  width: 1rem;
+  height: 1rem;
+}
+
+.a-icono--grande {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.a-icono--extra-grande {
+  width: 3rem;
+  height: 3rem;
+  stroke-width: 1.5; /* un trazo fino se ve mejor en tamanio grande */
+}
+
+/* Colores semanticos. */
+.a-icono--primario { color: var(--color-primario); }
+.a-icono--error    { color: var(--color-error); }
+.a-icono--exito    { color: var(--color-exito); }
+.a-icono--atenuado { color: var(--color-sobre-superficie-variante); }
+
+/* Icono de giro, para los estados de carga. */
+.a-icono--girando {
+  animation: a-icono-girar 1s linear infinite;
+}
+
+@keyframes a-icono-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}

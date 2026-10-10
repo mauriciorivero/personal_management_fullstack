@@ -1,0 +1,177 @@
+/* =====================================================================
+   05-organismos/_o-panel-detalle.css
+   ---------------------------------------------------------------------
+   ORGANISMO: Panel de detalle de un usuario
+
+   Muestra el usuario con sus telefonos y perfiles sociales. Es la
+   vista donde el aprendiz ve, con sus ojos, las TRES tablas
+   relacionadas en una sola respuesta JSON:
+
+     GET /api/usuarios/5
+     -> { ...datos del usuario, telefonos: [...], perfilesSociales: [...] }
+
+   Ese JSON lo armo el metodo #cargarRelaciones del usuario.service,
+   con dos consultas en paralelo y un JOIN.
+   ===================================================================== */
+
+.o-panel-detalle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: cabecera con avatar e identificacion
+   --------------------------------------------------------------------- */
+.o-panel-detalle__cabecera {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-4);
+
+  padding: var(--espacio-4);
+  border-radius: var(--radio-medio);
+  background-color: var(--color-contenedor-primario);
+  color: var(--color-sobre-contenedor-primario);
+}
+
+/* Avatar con las iniciales. Es la solucion clasica cuando no hay
+   foto: siempre hay algo que mostrar y nunca falla la carga. */
+.o-panel-detalle__avatar {
+  display: grid;
+  place-items: center;
+
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--radio-completo);
+  flex-shrink: 0;
+
+  background-color: var(--color-primario);
+  color: var(--color-sobre-primario);
+
+  font-size: var(--texto-titulo-grande);
+  font-weight: var(--peso-semi);
+
+  /* text-transform garantiza mayusculas aunque el JavaScript las
+     envie en minuscula. */
+  text-transform: uppercase;
+}
+
+.o-panel-detalle__identidad {
+  min-width: 0; /* permite el recorte del nombre largo */
+}
+
+.o-panel-detalle__nombre {
+  font-size: var(--texto-titulo-grande);
+  font-weight: var(--peso-medio);
+  line-height: var(--linea-ajustada);
+}
+
+.o-panel-detalle__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-2);
+
+  margin-top: var(--espacio-2);
+  font-size: var(--texto-cuerpo-pequeno);
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: seccion de relaciones
+   --------------------------------------------------------------------- */
+.o-panel-detalle__seccion {
+  border: 1px solid var(--color-contorno-variante);
+  border-radius: var(--radio-medio);
+  overflow: hidden;
+}
+
+.o-panel-detalle__seccion-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+
+  padding: var(--espacio-3) var(--espacio-4);
+  background-color: var(--color-superficie-contenedor);
+}
+
+.o-panel-detalle__seccion-titulo {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+
+  font-size: var(--texto-titulo-medio);
+  font-weight: var(--peso-semi);
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: lista de relaciones
+   --------------------------------------------------------------------- */
+.o-panel-detalle__lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.o-panel-detalle__item {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+
+  padding: var(--espacio-3) var(--espacio-4);
+  border-top: 1px solid var(--color-contorno-variante);
+}
+
+.o-panel-detalle__item-icono {
+  display: grid;
+  place-items: center;
+
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radio-completo);
+  flex-shrink: 0;
+
+  background-color: var(--color-contenedor-secundario);
+  color: var(--color-sobre-contenedor-secundario);
+}
+
+.o-panel-detalle__item-contenido {
+  flex: 1;
+  min-width: 0;
+}
+
+.o-panel-detalle__item-principal {
+  font-weight: var(--peso-medio);
+
+  /* Recorte con puntos suspensivos para las URL largas. */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.o-panel-detalle__item-secundario {
+  font-size: var(--texto-cuerpo-pequeno);
+  color: var(--color-sobre-superficie-variante);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.o-panel-detalle__item-acciones {
+  display: flex;
+  gap: var(--espacio-1);
+  flex-shrink: 0;
+}
+
+/* Enlace externo con su icono. target="_blank" necesita
+   rel="noopener noreferrer" por seguridad: sin eso, la pagina abierta
+   puede manipular la nuestra a traves de window.opener. */
+.o-panel-detalle__enlace {
+  color: var(--color-primario);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.o-panel-detalle__enlace:hover {
+  text-decoration-thickness: 2px;
+}

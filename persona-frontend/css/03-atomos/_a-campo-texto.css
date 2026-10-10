@@ -1,0 +1,143 @@
+/* =====================================================================
+   03-atomos/_a-campo-texto.css
+   ---------------------------------------------------------------------
+   ATOMO: Campo de texto (input, textarea, select)
+
+   Implementa el estilo "outlined text field" de Material 3: el campo
+   tiene un borde y la etiqueta flota sobre el al escribir.
+
+   IMPORTANTE: este archivo estiliza SOLO el control. La etiqueta, el
+   texto de ayuda y el mensaje de error forman parte de la MOLECULA
+   .m-campo-formulario, porque ya son una combinacion de atomos.
+   Esa separacion es la esencia del Atomic Design.
+   ===================================================================== */
+
+.a-campo-texto {
+  width: 100%;
+  min-height: var(--altura-objetivo-toque);
+  padding: var(--espacio-3) var(--espacio-4);
+
+  border: 1px solid var(--color-contorno);
+  border-radius: var(--radio-extra-pequeno);
+
+  background-color: var(--color-superficie);
+  color: var(--color-sobre-superficie);
+
+  font-size: var(--texto-cuerpo-grande);
+  font-family: var(--fuente-base);
+  line-height: var(--linea-normal);
+
+  transition:
+    border-color var(--duracion-corta) var(--curva-estandar),
+    box-shadow var(--duracion-corta) var(--curva-estandar);
+}
+
+/* Texto de sugerencia dentro del campo. */
+.a-campo-texto::placeholder {
+  color: var(--color-sobre-superficie-variante);
+  opacity: 0.7;
+}
+
+.a-campo-texto:hover:not(:disabled) {
+  border-color: var(--color-sobre-superficie);
+}
+
+/* Al enfocar, el borde se engrosa con un box-shadow interno en vez de
+   cambiar el border-width. Por que? Porque cambiar el grosor del borde
+   modifica el tamanio de la caja y el campo "salta" un pixel. El
+   box-shadow no ocupa espacio en el layout. */
+.a-campo-texto:focus {
+  outline: none;
+  border-color: var(--color-primario);
+  box-shadow: inset 0 0 0 1px var(--color-primario);
+}
+
+.a-campo-texto:disabled {
+  background-color: var(--color-superficie-variante);
+  color: var(--color-sobre-superficie-variante);
+  opacity: var(--opacidad-deshabilitado);
+  cursor: not-allowed;
+}
+
+/* ---------------------------------------------------------------------
+   ESTADO DE ERROR
+   ---------------------------------------------------------------------
+   Se activa con el atributo aria-invalid="true", no con una clase.
+
+   Por que? Porque aria-invalid hace DOS cosas a la vez: le avisa al
+   lector de pantalla que el campo tiene un error Y nos sirve de
+   selector CSS. Una clase solo haria lo segundo.
+
+   Regla de accesibilidad: el color NUNCA es el unico indicador de un
+   error. Siempre va acompaniado del mensaje de texto que renderiza la
+   molecula .m-campo-formulario, para que tambien lo perciba alguien
+   con daltonismo.
+   --------------------------------------------------------------------- */
+.a-campo-texto[aria-invalid="true"] {
+  border-color: var(--color-error);
+}
+
+.a-campo-texto[aria-invalid="true"]:focus {
+  box-shadow: inset 0 0 0 1px var(--color-error);
+}
+
+/* ---------------------------------------------------------------------
+   VARIANTE: area de texto (varias lineas)
+   --------------------------------------------------------------------- */
+.a-campo-texto--area {
+  min-height: 6rem;
+
+  /* Solo permitimos redimensionar en vertical: el horizontal rompe
+     el diseno de la cuadricula del formulario. */
+  resize: vertical;
+}
+
+/* ---------------------------------------------------------------------
+   VARIANTE: lista desplegable
+   ---------------------------------------------------------------------
+   appearance: none quita la flecha nativa del navegador para poder
+   dibujar la nuestra con un SVG embebido como background-image.
+
+   El SVG va codificado en una data URI (no es un archivo aparte), asi
+   que no genera ninguna peticion de red extra.
+   --------------------------------------------------------------------- */
+.a-campo-texto--seleccion {
+  appearance: none;
+
+  /* Espacio a la derecha para que el texto no pise la flecha. */
+  padding-right: var(--espacio-10);
+
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2349454f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--espacio-4) center;
+  background-size: 1.125rem;
+
+  cursor: pointer;
+}
+
+/* En tema oscuro la flecha tiene que ser clara o se pierde contra el
+   fondo. Repetimos la data URI cambiando el color del stroke. */
+:root[data-tema="dark"] .a-campo-texto--seleccion {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23cac4d0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="light"]) .a-campo-texto--seleccion {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23cac4d0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  }
+}
+
+/* ---------------------------------------------------------------------
+   VARIANTE: campo de busqueda (con la lupa a la izquierda)
+   --------------------------------------------------------------------- */
+.a-campo-texto--busqueda {
+  padding-left: var(--espacio-10);
+  border-radius: var(--radio-completo);
+  background-color: var(--color-superficie-contenedor-alto);
+  border-color: transparent;
+
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2349454f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left var(--espacio-4) center;
+  background-size: 1.125rem;
+}

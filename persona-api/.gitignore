@@ -1,0 +1,31 @@
+# =====================================================================
+# .gitignore  -  Archivos que git debe IGNORAR
+# ---------------------------------------------------------------------
+# Regla general: nunca se versiona lo que se puede regenerar
+# (node_modules) ni lo que es secreto (.env).
+# =====================================================================
+
+# Dependencias: se reinstalan con "npm install" leyendo package.json
+node_modules/
+
+# Variables de entorno con credenciales reales
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Carpetas de editores
+.vscode/
+.idea/
+
+# Cache y cobertura de pruebas
+.cache/
+coverage/

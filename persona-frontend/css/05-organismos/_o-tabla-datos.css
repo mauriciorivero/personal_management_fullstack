@@ -1,0 +1,259 @@
+/* =====================================================================
+   05-organismos/_o-tabla-datos.css
+   ---------------------------------------------------------------------
+   ORGANISMO: Tabla de datos
+
+   EL PROBLEMA MAS DIFICIL DE UNA TABLA: EL MOVIL.
+   Una tabla de 8 columnas no cabe en 360px de ancho. Hay tres
+   soluciones posibles:
+
+     1. Desplazamiento horizontal -> simple, pero incomodo de usar.
+     2. Ocultar columnas          -> se pierde informacion.
+     3. Transformar en tarjetas   -> cada fila se convierte en una
+                                     tarjeta apilada. <- la que usamos
+
+   La opcion 3 se logra con el truco de los atributos data-etiqueta:
+   el <td> guarda el nombre de su columna en data-etiqueta="Nombre" y
+   en movil lo mostramos con content: attr(data-etiqueta). Asi el
+   mismo HTML sirve para tabla y para tarjetas.
+
+   ACCESIBILIDAD: usamos <table> de verdad, no <div>. Los lectores de
+   pantalla saben navegar tablas por filas y columnas y anuncian los
+   encabezados, pero solo si el HTML es semantico.
+   ===================================================================== */
+
+.o-tabla-datos-envoltura {
+  background-color: var(--color-superficie);
+  border-radius: var(--radio-medio);
+  box-shadow: var(--elevacion-1);
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: cabecera del organismo (titulo + acciones)
+   --------------------------------------------------------------------- */
+.o-tabla-datos__cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+
+  padding: var(--espacio-4) var(--espacio-5);
+  border-bottom: 1px solid var(--color-contorno-variante);
+}
+
+.o-tabla-datos__titulo {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+
+  font-size: var(--texto-titulo-grande);
+  font-weight: var(--peso-medio);
+}
+
+/* ---------------------------------------------------------------------
+   Contenedor con desplazamiento
+   ---------------------------------------------------------------------
+   tabindex="0" en este div (lo pone el JavaScript) permite desplazar
+   la tabla con el teclado. Sin eso, quien no usa raton no puede ver
+   las columnas de la derecha.
+   --------------------------------------------------------------------- */
+.o-tabla-datos__contenedor {
+  width: 100%;
+  overflow-x: auto;
+
+  /* Desplazamiento con inercia en iOS. */
+  -webkit-overflow-scrolling: touch;
+}
+
+.o-tabla-datos {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--texto-cuerpo-medio);
+}
+
+/* ---------------------------------------------------------------------
+   Encabezado de la tabla
+   --------------------------------------------------------------------- */
+.o-tabla-datos__encabezado {
+  background-color: var(--color-superficie-contenedor);
+}
+
+.o-tabla-datos__celda-encabezado {
+  padding: var(--espacio-3) var(--espacio-4);
+  text-align: left;
+  white-space: nowrap;
+
+  font-size: var(--texto-etiqueta-medio);
+  font-weight: var(--peso-semi);
+  text-transform: uppercase;
+  letter-spacing: var(--letra-amplia);
+  color: var(--color-sobre-superficie-variante);
+
+  border-bottom: 1px solid var(--color-contorno-variante);
+}
+
+/* Columna de acciones: alineada a la derecha y sin estirarse. */
+.o-tabla-datos__celda-encabezado--acciones {
+  text-align: right;
+  width: 1%;
+}
+
+/* ---------------------------------------------------------------------
+   Filas y celdas
+   --------------------------------------------------------------------- */
+.o-tabla-datos__fila {
+  border-bottom: 1px solid var(--color-contorno-variante);
+  transition: background-color var(--duracion-corta) var(--curva-estandar);
+}
+
+.o-tabla-datos__fila:last-child {
+  border-bottom: none;
+}
+
+.o-tabla-datos__fila:hover {
+  background-color: var(--color-superficie-contenedor-bajo);
+}
+
+/* Fila seleccionada (al abrir su panel de detalle). */
+.o-tabla-datos__fila--seleccionada {
+  background-color: var(--color-contenedor-primario);
+}
+
+.o-tabla-datos__celda {
+  padding: var(--espacio-3) var(--espacio-4);
+  vertical-align: middle;
+  color: var(--color-sobre-superficie);
+}
+
+/* Celda con el id: monoespaciada para que los numeros se alineen. */
+.o-tabla-datos__celda--id {
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-cuerpo-pequeno);
+  color: var(--color-sobre-superficie-variante);
+  white-space: nowrap;
+}
+
+.o-tabla-datos__celda--principal {
+  font-weight: var(--peso-medio);
+}
+
+.o-tabla-datos__celda--numero {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.o-tabla-datos__celda--acciones {
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Grupo de botones de accion de la fila. */
+.o-tabla-datos__acciones {
+  display: inline-flex;
+  gap: var(--espacio-1);
+  justify-content: flex-end;
+}
+
+/* Texto secundario dentro de una celda (ciudad bajo el nombre). */
+.o-tabla-datos__celda-secundario {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--texto-cuerpo-pequeno);
+  color: var(--color-sobre-superficie-variante);
+}
+
+/* =====================================================================
+   MOVIL: la tabla se convierte en tarjetas
+   =====================================================================
+   Esta es la parte interesante. Cambiamos el display de los elementos
+   de la tabla para que dejen de comportarse como tabla:
+
+     thead -> se oculta (los nombres de columna pasan a cada celda)
+     tr    -> se vuelve un bloque con aspecto de tarjeta
+     td    -> se vuelve una fila de "etiqueta | valor"
+   ===================================================================== */
+@media (max-width: 904px) {
+  /* Escondemos el encabezado, pero con la tecnica accesible: sigue
+     existiendo para el lector de pantalla. */
+  .o-tabla-datos__encabezado {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .o-tabla-datos,
+  .o-tabla-datos tbody,
+  .o-tabla-datos__fila,
+  .o-tabla-datos__celda {
+    display: block;
+    width: 100%;
+  }
+
+  /* Cada fila es ahora una tarjeta. */
+  .o-tabla-datos__fila {
+    margin-bottom: var(--espacio-3);
+    padding: var(--espacio-3);
+    border: 1px solid var(--color-contorno-variante);
+    border-radius: var(--radio-pequeno);
+    background-color: var(--color-superficie);
+  }
+
+  .o-tabla-datos__fila:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Cada celda es una fila de dos columnas: etiqueta y valor. */
+  .o-tabla-datos__celda {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    gap: var(--espacio-3);
+    align-items: baseline;
+
+    /* justify-items: start evita que los elementos se estiren a todo
+       el ancho de su columna.
+
+       Por defecto, un elemento dentro de una celda de grid se ESTIRA
+       (justify-items: stretch). Una insignia es inline-flex, pero al
+       convertirse en item de grid pierde su ancho natural y se vuelve
+       una barra de color de lado a lado. Con `start` conserva el
+       ancho de su contenido, como se ve en la vista de escritorio. */
+    justify-items: start;
+
+    padding: var(--espacio-2) 0;
+    border-bottom: 1px solid var(--color-contorno-variante);
+  }
+
+  /* AQUI ESTA EL TRUCO: attr(data-etiqueta) lee el atributo
+     data-etiqueta del <td> y lo imprime como contenido generado.
+     Por eso en el JavaScript cada celda se crea con
+     data-etiqueta="Nombre completo". */
+  .o-tabla-datos__celda::before {
+    content: attr(data-etiqueta);
+
+    font-size: var(--texto-etiqueta-medio);
+    font-weight: var(--peso-semi);
+    text-transform: uppercase;
+    letter-spacing: var(--letra-amplia);
+    color: var(--color-sobre-superficie-variante);
+  }
+
+  /* La celda de acciones no necesita etiqueta ni borde. */
+  .o-tabla-datos__celda--acciones {
+    display: flex;
+    justify-content: flex-end;
+    border-bottom: none;
+    padding-top: var(--espacio-3);
+  }
+
+  .o-tabla-datos__celda--acciones::before {
+    content: none;
+  }
+
+  .o-tabla-datos__celda--numero {
+    text-align: left;
+  }
+}

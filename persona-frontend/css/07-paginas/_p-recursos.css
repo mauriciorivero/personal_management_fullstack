@@ -1,0 +1,104 @@
+/* =====================================================================
+   07-paginas/_p-recursos.css
+   ---------------------------------------------------------------------
+   PAGINAS: ajustes especificos de cada vista
+
+   ATOMIC DESIGN - NIVEL 5: PAGINAS
+   Una pagina es una plantilla con contenido real. En CSS, este nivel
+   debe ser el MAS PEQUENO de todos: si una pagina necesita mucho CSS
+   propio, es senial de que falta un componente reutilizable.
+
+   Compara el tamanio de los archivos del proyecto:
+     atomos     -> mucho CSS (se reutiliza en todas partes)
+     moleculas  -> bastante
+     organismos -> bastante
+     plantillas -> poco
+     paginas    -> muy poco  <- este archivo
+
+   Esa piramide invertida es la senial de un sistema de diseno sano.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   Cuadricula de tarjetas de resumen (contadores del tablero)
+   --------------------------------------------------------------------- */
+.p-recursos__resumen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: var(--espacio-4);
+  margin-bottom: var(--espacio-5);
+}
+
+/* Tarjeta de contador: numero grande y etiqueta. */
+.p-recursos__contador {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+
+  padding: var(--espacio-4);
+  border-radius: var(--radio-medio);
+  background-color: var(--color-superficie);
+  box-shadow: var(--elevacion-1);
+  border-left: 4px solid var(--color-primario);
+}
+
+.p-recursos__contador--telefonos { border-left-color: var(--color-secundario); }
+.p-recursos__contador--redes     { border-left-color: var(--color-terciario); }
+.p-recursos__contador--perfiles  { border-left-color: var(--color-exito); }
+
+.p-recursos__contador-valor {
+  font-size: var(--texto-display-medio);
+  font-weight: var(--peso-negrita);
+  line-height: 1;
+  color: var(--color-sobre-superficie);
+  font-variant-numeric: tabular-nums;
+}
+
+.p-recursos__contador-etiqueta {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+
+  font-size: var(--texto-etiqueta-grande);
+  color: var(--color-sobre-superficie-variante);
+}
+
+/* ---------------------------------------------------------------------
+   Vista de perfiles sociales: la llave compuesta se muestra en
+   monoespaciada para que se entienda que son DOS valores juntos.
+   --------------------------------------------------------------------- */
+.p-recursos__llave-compuesta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+
+  padding: var(--espacio-1) var(--espacio-2);
+  border-radius: var(--radio-extra-pequeno);
+
+  background-color: var(--color-superficie-variante);
+  color: var(--color-sobre-superficie-variante);
+
+  font-family: var(--fuente-mono);
+  font-size: var(--texto-cuerpo-pequeno);
+}
+
+.p-recursos__llave-separador {
+  opacity: 0.5;
+}
+
+/* ---------------------------------------------------------------------
+   Enlace de URL dentro de una tabla: recortado para no romper el
+   ancho de la columna.
+   --------------------------------------------------------------------- */
+.p-recursos__url {
+  display: inline-block;
+  max-width: 18rem;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+
+  color: var(--color-primario);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

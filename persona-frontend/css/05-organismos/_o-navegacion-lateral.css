@@ -1,0 +1,224 @@
+/* =====================================================================
+   05-organismos/_o-navegacion-lateral.css
+   ---------------------------------------------------------------------
+   ORGANISMO: Navegacion lateral (navigation drawer)
+
+   COMPORTAMIENTO RESPONSIVO (dos modos, un solo HTML):
+
+     MOVIL (< 905px)      -> "modal drawer": oculto fuera de pantalla,
+                             entra deslizando sobre el contenido y con
+                             un velo oscuro detras.
+     ESCRITORIO (>= 905px)-> "standard drawer": siempre visible, forma
+                             parte de la cuadricula de la pagina.
+
+   Es el mismo HTML en los dos casos: solo cambia el CSS. Ese es el
+   objetivo del diseno responsivo bien hecho, no duplicar el marcado.
+
+   ACCESIBILIDAD: en movil el panel lleva role="dialog" y
+   aria-modal="true"; el JavaScript atrapa el foco dentro mientras
+   esta abierto y lo devuelve al boton al cerrarlo.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   Velo (overlay) que oscurece el contenido en movil
+   --------------------------------------------------------------------- */
+.o-navegacion-velo {
+  position: fixed;
+  inset: 0;
+  z-index: var(--capa-velo);
+
+  background-color: rgb(0 0 0 / 0.5);
+
+  /* Oculto por defecto. Usamos opacity + visibility en lugar de
+     display: none para poder animar la aparicion; display no se
+     puede transicionar. */
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--duracion-media) var(--curva-estandar),
+    visibility var(--duracion-media) var(--curva-estandar);
+}
+
+.o-navegacion-velo--visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ---------------------------------------------------------------------
+   El panel de navegacion
+   --------------------------------------------------------------------- */
+.o-navegacion-lateral {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: calc(var(--capa-velo) + 1);
+
+  display: flex;
+  flex-direction: column;
+
+  width: var(--ancho-navegacion-lateral);
+  padding: var(--espacio-4) var(--espacio-3);
+
+  background-color: var(--color-superficie-contenedor-bajo);
+  border-right: 1px solid var(--color-contorno-variante);
+
+  /* Fuera de pantalla a la izquierda. translateX es mucho mas
+     eficiente que animar `left`, porque el navegador lo resuelve en
+     la GPU sin recalcular el layout. */
+  transform: translateX(-100%);
+  transition: transform var(--duracion-larga) var(--curva-enfatizada);
+
+  /* Si hay muchos enlaces, el panel se desplaza por dentro. */
+  overflow-y: auto;
+}
+
+.o-navegacion-lateral--abierta {
+  transform: translateX(0);
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: cabecera del panel (solo visible en movil)
+   --------------------------------------------------------------------- */
+.o-navegacion-lateral__cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: var(--espacio-2) var(--espacio-3) var(--espacio-4);
+}
+
+.o-navegacion-lateral__titulo {
+  font-size: var(--texto-titulo-medio);
+  font-weight: var(--peso-medio);
+  color: var(--color-sobre-superficie);
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: lista de enlaces
+   --------------------------------------------------------------------- */
+.o-navegacion-lateral__lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Titulo de grupo ("Gestion", "Catalogos"). */
+.o-navegacion-lateral__grupo {
+  padding: var(--espacio-4) var(--espacio-4) var(--espacio-2);
+
+  font-size: var(--texto-etiqueta-medio);
+  font-weight: var(--peso-medio);
+  text-transform: uppercase;
+  letter-spacing: var(--letra-muy-amplia);
+  color: var(--color-sobre-superficie-variante);
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: enlace de navegacion
+   --------------------------------------------------------------------- */
+.o-navegacion-lateral__enlace {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+
+  width: 100%;
+  min-height: var(--altura-objetivo-toque);
+  padding: var(--espacio-2) var(--espacio-4);
+
+  /* Pildora completa: el estilo de Material 3 para la navegacion. */
+  border-radius: var(--radio-completo);
+
+  font-size: var(--texto-etiqueta-grande);
+  font-weight: var(--peso-medio);
+  text-align: left;
+  color: var(--color-sobre-superficie-variante);
+
+  cursor: pointer;
+  transition: var(--transicion-rapida);
+}
+
+.o-navegacion-lateral__enlace:hover {
+  background-color: var(--color-superficie-contenedor-alto);
+  color: var(--color-sobre-superficie);
+}
+
+/* ---------------------------------------------------------------------
+   ESTADO ACTIVO
+   ---------------------------------------------------------------------
+   Lo marcamos con el atributo aria-current="page", que es el estandar
+   de accesibilidad para "esta es la pagina en la que estas".
+
+   De nuevo el mismo principio: un atributo ARIA sirve a la vez de
+   informacion para el lector de pantalla Y de selector CSS. Dos
+   problemas, una sola solucion.
+   --------------------------------------------------------------------- */
+.o-navegacion-lateral__enlace[aria-current="page"] {
+  background-color: var(--color-contenedor-secundario);
+  color: var(--color-sobre-contenedor-secundario);
+  font-weight: var(--peso-semi);
+}
+
+.o-navegacion-lateral__enlace-icono {
+  width: 1.375rem;
+  height: 1.375rem;
+  flex-shrink: 0;
+}
+
+/* Contador de registros al final del enlace. */
+.o-navegacion-lateral__contador {
+  margin-left: auto;
+
+  padding: 0 var(--espacio-2);
+  min-width: 1.5rem;
+  border-radius: var(--radio-completo);
+
+  background-color: var(--color-superficie-contenedor-alto);
+  font-size: var(--texto-etiqueta-pequeno);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: pie del panel
+   --------------------------------------------------------------------- */
+.o-navegacion-lateral__pie {
+  margin-top: auto; /* lo empuja al fondo del panel */
+  padding: var(--espacio-4);
+
+  font-size: var(--texto-cuerpo-pequeno);
+  color: var(--color-sobre-superficie-variante);
+  border-top: 1px solid var(--color-contorno-variante);
+}
+
+.o-navegacion-lateral__pie code {
+  font-size: var(--texto-etiqueta-pequeno);
+  word-break: break-all;
+}
+
+/* ---------------------------------------------------------------------
+   ESCRITORIO: el panel pasa a ser parte del layout
+   --------------------------------------------------------------------- */
+@media (min-width: 905px) {
+  .o-navegacion-lateral {
+    /* static lo devuelve al flujo normal del documento. */
+    position: static;
+    transform: none;
+    height: 100%;
+    border-radius: 0;
+  }
+
+  /* Ya no hay velo ni boton de cerrar: el panel es permanente. */
+  .o-navegacion-velo,
+  .o-navegacion-lateral__cerrar {
+    display: none;
+  }
+
+  .o-navegacion-lateral__cabecera {
+    display: none;
+  }
+}

@@ -1,0 +1,137 @@
+/* =====================================================================
+   03-atomos/_a-cargador.css
+   ---------------------------------------------------------------------
+   ATOMO: Indicador de carga (spinner y barra de progreso)
+
+   POR QUE IMPORTA TANTO UN INDICADOR DE CARGA?
+   Porque una peticion a la API tarda. Sin un indicador, el usuario ve
+   la pantalla congelada y no sabe si la aplicacion esta trabajando o
+   si se rompio. Entonces hace clic otra vez, y otra.
+
+   ACCESIBILIDAD: el contenedor lleva role="status" y aria-live="polite"
+   para que el lector de pantalla anuncie "Cargando" sin interrumpir lo
+   que el usuario estuviera escuchando.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   Spinner circular
+   ---------------------------------------------------------------------
+   Truco: un circulo con el borde superior de otro color, girando.
+   No hace falta ni SVG ni imagen, solo CSS.
+   --------------------------------------------------------------------- */
+.a-cargador {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+
+  border: 3px solid var(--color-contorno-variante);
+  border-top-color: var(--color-primario);
+  border-radius: var(--radio-completo);
+
+  animation: a-cargador-girar 0.8s linear infinite;
+}
+
+@keyframes a-cargador-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.a-cargador--grande {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-width: 4px;
+}
+
+.a-cargador--pequeno {
+  width: 1rem;
+  height: 1rem;
+  border-width: 2px;
+}
+
+/* Cargador centrado con su mensaje, para llenar un panel completo. */
+.a-cargador-bloque {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-4);
+
+  padding: var(--espacio-12) var(--espacio-4);
+  color: var(--color-sobre-superficie-variante);
+  font-size: var(--texto-cuerpo-medio);
+}
+
+/* ---------------------------------------------------------------------
+   Barra de progreso indeterminada
+   ---------------------------------------------------------------------
+   "Indeterminada" significa que no sabemos cuanto falta (a diferencia
+   de una descarga, donde si conocemos el porcentaje). Se anima en
+   bucle para comunicar "estoy trabajando".
+   --------------------------------------------------------------------- */
+.a-barra-progreso {
+  position: relative;
+  width: 100%;
+  height: 4px;
+  overflow: hidden;
+
+  background-color: var(--color-contenedor-primario);
+  border-radius: var(--radio-completo);
+}
+
+.a-barra-progreso::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+
+  width: 40%;
+  background-color: var(--color-primario);
+  border-radius: var(--radio-completo);
+
+  animation: a-barra-recorrer 1.4s var(--curva-estandar) infinite;
+}
+
+@keyframes a-barra-recorrer {
+  /* Entra por la izquierda, sale por la derecha. */
+  from { left: -40%; }
+  to   { left: 100%; }
+}
+
+/* ---------------------------------------------------------------------
+   Esqueleto de carga (skeleton)
+   ---------------------------------------------------------------------
+   Rectangulos grises con un brillo que recorre, ocupando el lugar del
+   contenido que todavia no llego. Se percibe mas rapido que un
+   spinner porque el usuario ya ve la FORMA de lo que va a aparecer.
+   --------------------------------------------------------------------- */
+.a-esqueleto {
+  /* Gradiente de tres paradas: el brillo es la del medio. */
+  background: linear-gradient(
+    90deg,
+    var(--color-superficie-variante) 25%,
+    var(--color-superficie-contenedor-alto) 50%,
+    var(--color-superficie-variante) 75%
+  );
+
+  /* El fondo mide el doble que el elemento para poder desplazarlo. */
+  background-size: 200% 100%;
+  border-radius: var(--radio-extra-pequeno);
+
+  animation: a-esqueleto-brillo 1.5s ease-in-out infinite;
+}
+
+@keyframes a-esqueleto-brillo {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+.a-esqueleto--texto {
+  height: 1rem;
+  margin-bottom: var(--espacio-2);
+}
+
+.a-esqueleto--titulo {
+  height: 1.5rem;
+  width: 60%;
+  margin-bottom: var(--espacio-3);
+}

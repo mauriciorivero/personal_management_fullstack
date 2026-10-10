@@ -1,0 +1,96 @@
+/* =====================================================================
+   04-moleculas/_m-campo-formulario.css
+   ---------------------------------------------------------------------
+   MOLECULA: Campo de formulario completo
+
+   ATOMIC DESIGN - NIVEL 2: MOLECULAS
+   Una molecula es un grupo de atomos que trabajan juntos para cumplir
+   UNA funcion concreta. Por si solos, un <label>, un <input> y un
+   mensaje de error no hacen nada util; juntos forman "un campo de
+   formulario que valida".
+
+   COMPOSICION DE ESTA MOLECULA:
+     .a-etiqueta                 (atomo)
+     .a-campo-texto              (atomo)
+     .m-campo-formulario__ayuda  (parte propia de la molecula)
+     .m-campo-formulario__error  (parte propia de la molecula)
+
+   REGLA CLAVE DEL ATOMIC DESIGN: la molecula NO redefine el estilo de
+   sus atomos. Solo los ORGANIZA en el espacio. Si aqui escribieramos
+   `.m-campo-formulario .a-boton { background: red; }` romperiamos el
+   sistema: el mismo atomo se veria distinto en cada contexto y ya no
+   seria predecible.
+   ===================================================================== */
+
+.m-campo-formulario {
+  display: flex;
+  flex-direction: column;
+
+  /* min-width: 0 es indispensable dentro de un grid o flex. Sin esto,
+     un campo con contenido largo se niega a encogerse y desborda la
+     cuadricula del formulario. Es uno de los bugs mas comunes de CSS. */
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: texto de ayuda
+   ---------------------------------------------------------------------
+   Pista permanente bajo el campo ("Formato: AAAA-MM-DD").
+   Se conecta al input con aria-describedby para que el lector de
+   pantalla la lea despues del nombre del campo.
+   --------------------------------------------------------------------- */
+.m-campo-formulario__ayuda {
+  margin-top: var(--espacio-1);
+  padding-inline: var(--espacio-1);
+
+  font-size: var(--texto-cuerpo-pequeno);
+  color: var(--color-sobre-superficie-variante);
+  line-height: var(--linea-normal);
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: mensaje de error
+   ---------------------------------------------------------------------
+   Arranca oculto y se muestra cuando el JavaScript le pone el
+   modificador --visible, al mismo tiempo que pone aria-invalid="true"
+   en el campo.
+
+   Lleva role="alert" para que el lector de pantalla lo anuncie en
+   cuanto aparece, sin esperar a que el usuario llegue navegando.
+   --------------------------------------------------------------------- */
+.m-campo-formulario__error {
+  display: none;
+  align-items: flex-start;
+  gap: var(--espacio-1);
+
+  margin-top: var(--espacio-1);
+  padding-inline: var(--espacio-1);
+
+  font-size: var(--texto-cuerpo-pequeno);
+  font-weight: var(--peso-medio);
+  color: var(--color-error);
+  line-height: var(--linea-normal);
+}
+
+.m-campo-formulario__error--visible {
+  display: flex;
+}
+
+/* Icono de advertencia junto al mensaje. Refuerza el error sin
+   depender solo del color rojo. */
+.m-campo-formulario__error-icono {
+  width: 0.875rem;
+  height: 0.875rem;
+
+  /* El pequeno desplazamiento alinea el icono con la primera linea
+     del texto, no con el centro del bloque. */
+  margin-top: 0.15rem;
+  flex-shrink: 0;
+}
+
+/* ---------------------------------------------------------------------
+   MODIFICADOR: campo que ocupa las dos columnas de la cuadricula
+   --------------------------------------------------------------------- */
+.m-campo-formulario--ancho-completo {
+  grid-column: 1 / -1;
+}

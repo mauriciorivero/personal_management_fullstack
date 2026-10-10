@@ -1,0 +1,109 @@
+/* =====================================================================
+   02-base/_base.css
+   ---------------------------------------------------------------------
+   ESTILOS BASE: el aspecto por defecto de los elementos HTML, ya
+   usando los tokens del sistema de diseno.
+
+   Diferencia con el reset:
+     reset -> QUITA lo que trae el navegador.
+     base  -> PONE la identidad visual de nuestra aplicacion.
+   ===================================================================== */
+
+body {
+  font-family: var(--fuente-base);
+  font-size: var(--texto-cuerpo-grande);
+  font-weight: var(--peso-regular);
+  line-height: var(--linea-normal);
+
+  color: var(--color-sobre-fondo);
+  background-color: var(--color-fondo);
+
+  /* La transicion hace que el cambio de tema claro/oscuro se vea
+     suave en lugar de un parpadeo brusco. */
+  transition:
+    background-color var(--duracion-media) var(--curva-estandar),
+    color var(--duracion-media) var(--curva-estandar);
+}
+
+/* Fuente monoespaciada para codigo e identificadores. */
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--fuente-mono);
+  font-size: 0.9em;
+}
+
+/* ---------------------------------------------------------------------
+   CLASES DE UTILIDAD
+   ---------------------------------------------------------------------
+   Son pocas y muy concretas. El resto del estilo vive en los
+   componentes. Un sistema con cientos de utilidades termina siendo
+   HTML lleno de clases imposible de mantener.
+   --------------------------------------------------------------------- */
+
+/* Oculta el elemento para la vista pero NO para los lectores de
+   pantalla. Se usa en las etiquetas de los iconos y en los titulos
+   que solo existen para dar estructura semantica.
+
+   Por que no display:none? Porque eso lo oculta TAMBIEN para el
+   lector de pantalla, y entonces la informacion se pierde. */
+.solo-lectores {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+
+  /* clip-path lo reduce a nada visible sin sacarlo del flujo de
+     accesibilidad. */
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Oculta completamente (para la vista y para la accesibilidad). */
+.oculto {
+  display: none !important;
+}
+
+/* Centra el contenido y lo limita a un ancho legible. */
+.contenedor {
+  width: 100%;
+  max-width: var(--ancho-maximo-contenido);
+  margin-inline: auto;
+  padding-inline: var(--espacio-4);
+}
+
+@media (min-width: 600px) {
+  .contenedor {
+    padding-inline: var(--espacio-6);
+  }
+}
+
+/* Enlace "saltar al contenido": el primer elemento enfocable de la
+   pagina. Permite a quien usa teclado brincarse la navegacion y llegar
+   directo al contenido principal. Esta fuera de la pantalla hasta que
+   recibe el foco. */
+.salto-contenido {
+  position: absolute;
+  top: var(--espacio-2);
+  left: var(--espacio-2);
+  z-index: var(--capa-notificacion);
+
+  padding: var(--espacio-3) var(--espacio-4);
+  border-radius: var(--radio-pequeno);
+
+  background-color: var(--color-primario);
+  color: var(--color-sobre-primario);
+  font-weight: var(--peso-medio);
+
+  /* Lo sacamos de la pantalla sin quitarlo del orden de tabulacion. */
+  transform: translateY(-200%);
+  transition: transform var(--duracion-media) var(--curva-estandar);
+}
+
+.salto-contenido:focus {
+  transform: translateY(0);
+}

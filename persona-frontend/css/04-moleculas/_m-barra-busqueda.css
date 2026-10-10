@@ -1,0 +1,80 @@
+/* =====================================================================
+   04-moleculas/_m-barra-busqueda.css
+   ---------------------------------------------------------------------
+   MOLECULA: Barra de busqueda y filtros
+
+   Combina el atomo .a-campo-texto--busqueda con varios
+   .a-campo-texto--seleccion y un .a-boton. Juntos cumplen la funcion
+   "filtrar el listado".
+
+   DISENIO RESPONSIVO "MOVIL PRIMERO" (mobile first)
+   ---------------------------------------------------------------------
+   Escribimos primero el diseno de movil SIN media query, y luego
+   agregamos lo de pantallas grandes con min-width.
+
+   Por que en ese orden y no al contrario?
+     1. El movil es el caso mas restringido: obliga a decidir que es
+        verdaderamente esencial.
+     2. El CSS base queda mas simple (una columna) y las media queries
+        solo AGREGAN, nunca deshacen.
+     3. El telefono, que es el dispositivo mas lento, no tiene que
+        procesar reglas de escritorio que no va a usar.
+   ===================================================================== */
+
+.m-barra-busqueda {
+  display: flex;
+  flex-direction: column; /* movil: todo apilado */
+  gap: var(--espacio-3);
+
+  padding: var(--espacio-4);
+  border-radius: var(--radio-medio);
+  background-color: var(--color-superficie-contenedor-bajo);
+  border: 1px solid var(--color-contorno-variante);
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: campo de busqueda (ocupa el espacio disponible)
+   --------------------------------------------------------------------- */
+.m-barra-busqueda__campo {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: grupo de filtros
+   --------------------------------------------------------------------- */
+.m-barra-busqueda__filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-3);
+}
+
+.m-barra-busqueda__filtro {
+  flex: 1;
+  min-width: 9rem;
+}
+
+/* ---------------------------------------------------------------------
+   ELEMENTO: acciones
+   --------------------------------------------------------------------- */
+.m-barra-busqueda__acciones {
+  display: flex;
+  gap: var(--espacio-2);
+}
+
+/* Desde tablet: todo en una sola fila. */
+@media (min-width: 905px) {
+  .m-barra-busqueda {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .m-barra-busqueda__filtros {
+    flex: 0 0 auto;
+  }
+
+  .m-barra-busqueda__filtro {
+    min-width: 10rem;
+    flex: 0 0 auto;
+  }
+}

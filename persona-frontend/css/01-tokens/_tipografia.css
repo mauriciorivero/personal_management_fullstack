@@ -1,0 +1,97 @@
+/* =====================================================================
+   01-tokens/_tipografia.css
+   ---------------------------------------------------------------------
+   ESCALA TIPOGRAFICA de Material Design 3.
+
+   Material define 15 estilos agrupados en 5 familias:
+     display  -> textos enormes, para portadas
+     headline -> titulos de seccion
+     title    -> titulos de tarjeta o dialogo
+     body     -> texto corrido
+     label    -> botones, etiquetas, chips
+
+   Cada familia tiene tamanios grande, mediano y pequenio.
+
+   POR QUE USAR UNA ESCALA Y NO "el tamanio que se vea bien"?
+   Porque limitar las opciones produce consistencia. Si cada
+   desarrollador elige 15px, 17px o 18px segun su gusto, la interfaz
+   termina desordenada. Con la escala solo hay que decidir el ROL del
+   texto, y el tamanio viene dado.
+
+   TIPOGRAFIA: usamos la pila de fuentes del sistema. Asi la aplicacion
+   se ve nativa en cada plataforma y NO descarga ningun archivo de
+   fuente, lo que la hace mas rapida y permite trabajar sin internet.
+   ===================================================================== */
+
+:root {
+  /* ---------- Familias ---------- */
+  --fuente-base:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+
+  /* Fuente monoespaciada para codigo, id y numeros tabulares. */
+  --fuente-mono:
+    ui-monospace,
+    SFMono-Regular,
+    "SF Mono",
+    Menlo,
+    Consolas,
+    "Liberation Mono",
+    monospace;
+
+  /* ---------- Pesos ---------- */
+  --peso-regular: 400;
+  --peso-medio: 500;
+  --peso-semi: 600;
+  --peso-negrita: 700;
+
+  /* ---------- Escala de tamanios ----------
+     clamp(minimo, preferido, maximo) hace la tipografia FLUIDA: crece
+     con el ancho de la ventana pero nunca se sale del rango. Es la
+     forma moderna de hacer tipografia responsiva sin media queries. */
+
+  /* Display: portadas y numeros grandes. */
+  --texto-display-grande: clamp(2.5rem, 1.5rem + 3vw, 3.5rem);
+  --texto-display-medio: clamp(2rem, 1.3rem + 2.2vw, 2.8rem);
+
+  /* Headline: titulos de pagina. */
+  --texto-titular-grande: clamp(1.75rem, 1.3rem + 1.4vw, 2rem);
+  --texto-titular-medio: clamp(1.5rem, 1.2rem + 1vw, 1.75rem);
+  --texto-titular-pequeno: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+
+  /* Title: titulos de tarjeta, modal y tabla. */
+  --texto-titulo-grande: 1.375rem;  /* 22px */
+  --texto-titulo-medio: 1rem;       /* 16px */
+  --texto-titulo-pequeno: 0.875rem; /* 14px */
+
+  /* Body: texto corrido. */
+  --texto-cuerpo-grande: 1rem;      /* 16px */
+  --texto-cuerpo-medio: 0.875rem;   /* 14px */
+  --texto-cuerpo-pequeno: 0.75rem;  /* 12px */
+
+  /* Label: botones, chips, etiquetas de campo. */
+  --texto-etiqueta-grande: 0.875rem;  /* 14px */
+  --texto-etiqueta-medio: 0.75rem;    /* 12px */
+  --texto-etiqueta-pequeno: 0.6875rem;/* 11px */
+
+  /* ---------- Altura de linea ----------
+     Sin unidad a proposito: 1.5 significa "1.5 veces el tamanio de
+     fuente del elemento". Si pusieramos 24px, un titulo grande se
+     veria apretado. */
+  --linea-ajustada: 1.2;
+  --linea-normal: 1.5;
+  --linea-amplia: 1.65;
+
+  /* ---------- Espaciado entre letras ----------
+     Material usa tracking positivo en textos pequenios para que se
+     lean mejor, y negativo o nulo en los titulos grandes. */
+  --letra-ajustada: -0.015em;
+  --letra-normal: 0;
+  --letra-amplia: 0.03em;
+  --letra-muy-amplia: 0.08em;
+}
