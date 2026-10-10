@@ -663,6 +663,6 @@ MIT. Material formativo de libre uso para fines educativos.
 
 **SENA · Ficha 3489088 · Análisis y Desarrollo de Software · 2026**
 
-[Guía paso a paso](step_by_step.md) · [Modelo relacional](parametrization/db_relational_model/DB_relational_model.sql)
+ [Modelo relacional](parametrization/db_relational_model/DB_relational_model.sql)
 
 </div>
